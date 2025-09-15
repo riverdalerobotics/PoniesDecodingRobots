@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.follower.Follower;
@@ -12,13 +11,13 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class ChassisSubsystems extends SubsystemBase {
+public class ChassisSubsystem extends SubsystemBase {
     MotorEx fl, fr, bl, br;
     Follower follower;
     MecanumDrive drive;
     SparkFunOTOS otos;
     public Pose currentPos = new Pose(0, 0, 0);
-    public ChassisSubsystems(HardwareMap hardwareMap, PanelsTelemetry telemetry){
+    public ChassisSubsystem(HardwareMap hardwareMap, PanelsTelemetry telemetry){
         drive = new MecanumDrive(fl, fr, bl, br);
     }
     public Pose getPose(){
