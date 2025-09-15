@@ -15,7 +15,7 @@ public class ChassisSubsystem extends SubsystemBase {
     MotorEx fl, fr, bl, br;
     Follower follower;
     MecanumDrive drive;
-    SparkFunOTOS otos;
+    SparkFunOTOS otos;//edit
     public Pose currentPos = new Pose(0, 0, 0);
     public ChassisSubsystem(HardwareMap hardwareMap, PanelsTelemetry telemetry){
         drive = new MecanumDrive(fl, fr, bl, br);
