@@ -19,7 +19,7 @@ public final class RobotConstants {
 
         // Sensor names
         public static final String OTOS_SENSOR = "sensor_otos";
-
+        public static final String LIME_LIGHT = "limelight";
         // Motor specifications
         public static final Motor.GoBILDA DRIVE_MOTOR_TYPE = Motor.GoBILDA.RPM_312;
         public static final double MOTOR_TICKS_PER_REV = 537.7; // GoBILDA 5202 series
