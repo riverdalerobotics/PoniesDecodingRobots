@@ -19,7 +19,6 @@ public class DriveToLaunchZone extends CommandBase {
 
     public DriveToLaunchZone(char colour, ChassisSubsystem chassis){
         this.teamColour = colour;
-
         this.chassis = chassis;
         addRequirements(chassis);
     }
@@ -32,13 +31,14 @@ public class DriveToLaunchZone extends CommandBase {
         double y;
         if(teamColour == 'r'){
             y = -x;
+            target = new Pose(x, y, Math.toRadians(48));
         } else{
             y = x;
+            target = new Pose(x, y, Math.toRadians(132));
         }
         if(y>0){
             y=0;
         }
-        target = new Pose(x, y, Math.toRadians(132));
 
     }
 
