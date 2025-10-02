@@ -57,9 +57,13 @@ public class ChassisSubsystem extends SubsystemBase {
         return LLresults;
     }
     public Pose getPoseLLAsPose2D(){
-        return new Pose(-(getPoseLL().getPosition().y+72)/39.3701, -(getPoseLL().getPosition().x+72)/39.3701, getPose().getHeading());
+        return new Pose(-(getPoseLL().getPosition().y+72)/39.3701,
+                -(getPoseLL().getPosition().x+72)/39.3701,
+                getPose().getHeading());
     }
-
+    public void selectPipeline(int pipeline){
+        limelight.pipelineSwitch(pipeline);
+    }
     public void driveRobotOriented(double strafeSpeed, double forwardSpeed, double turn){
         drive.driveRobotCentric(strafeSpeed, forwardSpeed, turn, true);
     }
@@ -79,6 +83,10 @@ public class ChassisSubsystem extends SubsystemBase {
 
     public void followPathChain(PathChain pathChain){
         follower.followPath(pathChain);
+    }
+
+    public Follower getFollower() {
+        return follower;
     }
 
     @Override

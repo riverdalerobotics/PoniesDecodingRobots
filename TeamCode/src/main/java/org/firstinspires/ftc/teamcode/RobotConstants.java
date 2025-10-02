@@ -29,6 +29,10 @@ public final class RobotConstants {
         public static final boolean FRONT_RIGHT_REVERSED = true;
         public static final boolean BACK_LEFT_REVERSED = false;
         public static final boolean BACK_RIGHT_REVERSED = true;
+
+        //Limelight Pipelines
+        public static final int APRIL_TAG_PIPELINE = 0;
+        public static final int INTAKE_PIPELINE = 1;
     }
 
     // === PHYSICAL ROBOT DIMENSIONS ===
@@ -132,6 +136,10 @@ public final class RobotConstants {
 
         // Field-centric default setting
         public static final boolean DEFAULT_FIELD_CENTRIC = true;
+
+        //Setpoints
+        public static final double INTAKE_X_ANGLE_CHASSIS = 0d;
+        public static final double INTAKE_Y_ANGLE_CHASSIS = 0d;
     }
 
     // === AUTONOMOUS SETTINGS ===
@@ -212,6 +220,10 @@ public final class RobotConstants {
         public static final int CALIBRATION_SAMPLES = 100;
         public static final double CALIBRATION_DISTANCE = 48.0;    // inches for straight line test
         public static final double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
+
+        //PID coefficients
+        public static final double[] CHASSIS_PID_COEFFICIENTS = {0d, 0d, 0d};
+        public static final double CHASSIS_TOLERANCE = 0d;
     }
 
     // === SAFETY LIMITS ===

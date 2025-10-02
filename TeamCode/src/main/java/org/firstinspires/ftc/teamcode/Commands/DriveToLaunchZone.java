@@ -44,6 +44,18 @@ public class DriveToLaunchZone extends CommandBase {
 
     @Override
     public void execute() {
+        double x = (chassis.getPoseLL().getPosition().x-chassis.getPoseLL().getPosition().y)/2;
+        double y;
+        if(teamColour == 'r'){
+            y = -x;
+            target = new Pose(x, y, Math.toRadians(48));
+        } else{
+            y = x;
+            target = new Pose(x, y, Math.toRadians(132));
+        }
+        if(y>0){
+            y=0;
+        }
         super.execute();
         chassis.followPath(
                 new Path(new BezierCurve(
