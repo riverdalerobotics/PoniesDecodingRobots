@@ -24,6 +24,9 @@ public final class RobotConstants {
         public static final Motor.GoBILDA DRIVE_MOTOR_TYPE = Motor.GoBILDA.RPM_312;
         public static final double MOTOR_TICKS_PER_REV = 537.7; // GoBILDA 5202 series
 
+        //Gear Ratios
+        public static final double HOOD_SERVO_GEAR_RATIO = 0d;
+
         // Motor directions (adjust based on your robot)
         public static final boolean FRONT_LEFT_REVERSED = false;
         public static final boolean FRONT_RIGHT_REVERSED = true;
@@ -224,6 +227,9 @@ public final class RobotConstants {
         //PID coefficients
         public static final double[] CHASSIS_PID_COEFFICIENTS = {0d, 0d, 0d};
         public static final double CHASSIS_TOLERANCE = 0d;
+
+        //Other coefficients
+        public static final double TA_TO_ANGLE = 0d;
     }
 
     // === SAFETY LIMITS ===

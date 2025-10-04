@@ -29,7 +29,7 @@ public class ChassisSubsystem extends SubsystemBase {
     LLResult LLresults;
     public Pose currentPos = new Pose(0, 0, 0);
     public ChassisSubsystem(HardwareMap hardwareMap, TelemetryManager telemetry){
-        limelight = hardwareMap.get(Limelight3A.class, RobotConstants.Hardware.LIME_LIGHT);
+        limelight = new LLsubsystem(hardwareMap).limelight;
         fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, Motor.GoBILDA.RPM_435);
         fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, Motor.GoBILDA.RPM_435);
         br = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, Motor.GoBILDA.RPM_435);
