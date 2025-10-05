@@ -9,5 +9,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class ShootGPP extends SequentialCommandGroup {
     public ShootGPP(ShooterSubsystem purpleOne, ShooterSubsystem purpleTwo, ShooterSubsystem green){
         addCommands(new ShootSequence(green), new ShootTwo(purpleOne, purpleTwo));
+        addRequirements(purpleOne, purpleTwo, green);
     }
 }
