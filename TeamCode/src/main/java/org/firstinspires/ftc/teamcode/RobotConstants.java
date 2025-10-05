@@ -16,16 +16,24 @@ public final class RobotConstants {
         public static final String FRONT_RIGHT_MOTOR = "frontRight";
         public static final String BACK_LEFT_MOTOR = "backLeft";
         public static final String BACK_RIGHT_MOTOR = "backRight";
+        public static final String INTAKE_MOTOR = "Intake Motor";
+        public static final String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder"};
+        public static final String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder"};
+        public static final String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder"};
+
 
         // Sensor names
         public static final String OTOS_SENSOR = "sensor_otos";
         public static final String LIME_LIGHT = "limelight";
+        public static final String[] COLOUR_SENSORS = {"LeftColourSensor", "MidColourSensor", "RightColourSensor"};
         // Motor specifications
-        public static final Motor.GoBILDA DRIVE_MOTOR_TYPE = Motor.GoBILDA.RPM_312;
+        public static final Motor.GoBILDA DRIVE_MOTOR_TYPE = Motor.GoBILDA.RPM_435;
+        public static final Motor.GoBILDA INTAKE_MOTOR_TYPE = Motor.GoBILDA.RPM_435;
         public static final double MOTOR_TICKS_PER_REV = 537.7; // GoBILDA 5202 series
 
         //Gear Ratios
         public static final double HOOD_SERVO_GEAR_RATIO = 0d;
+        public static final double SHOOTER_WHEEL_GEAR_RATIO = 0d;
 
         // Motor directions (adjust based on your robot)
         public static final boolean FRONT_LEFT_REVERSED = false;
@@ -143,6 +151,15 @@ public final class RobotConstants {
         //Setpoints
         public static final double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static final double INTAKE_Y_ANGLE_CHASSIS = 0d;
+        public static final double SHOOTER_SPEED = 0d;
+
+        //Timers
+        public static  final long SHOOTER_TIMER = 0;
+
+        //The rest
+        public static final double[] WHITE_RGB = {0, 0, 0};
+        public static final double INTAKE_MIN = 100;
+        public static final double WHITE_THRESHOLD = 20;
     }
 
     // === AUTONOMOUS SETTINGS ===

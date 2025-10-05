@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
+    public char colour = 'w';
     Motor shootMotor;
     Servo hoodServo;
     Servo feedServo;
@@ -25,7 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void rampToSpeed(double speed){
-        shootMotor.set(speed);
+        shootMotor.set(speed*RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
     }
     public void setHoodAngle(double angle){
         hoodServo.setPosition(angle*RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);

@@ -21,6 +21,7 @@ public class ShooterDefaultCommand extends CommandBase{
     public void initialize() {
         super.initialize();
         shooter.rampToSpeed(0);
+        shooter.resetFeed();
     }
 
     @Override

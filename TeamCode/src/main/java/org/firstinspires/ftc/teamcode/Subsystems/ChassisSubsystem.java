@@ -30,10 +30,10 @@ public class ChassisSubsystem extends SubsystemBase {
     public Pose currentPos = new Pose(0, 0, 0);
     public ChassisSubsystem(HardwareMap hardwareMap, TelemetryManager telemetry){
         limelight = new LLsubsystem(hardwareMap).limelight;
-        fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, Motor.GoBILDA.RPM_435);
-        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, Motor.GoBILDA.RPM_435);
-        br = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, Motor.GoBILDA.RPM_435);
-        bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, Motor.GoBILDA.RPM_435);
+        fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        br = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         otos = hardwareMap.get(SparkFunOTOS.class, RobotConstants.Hardware.OTOS_SENSOR);
         this.drive = new MecanumDrive(fl, fr, bl, br);
         this.telemetry = telemetry;

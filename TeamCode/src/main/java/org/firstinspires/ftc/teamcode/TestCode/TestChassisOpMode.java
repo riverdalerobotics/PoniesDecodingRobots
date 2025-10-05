@@ -14,16 +14,21 @@ import org.firstinspires.ftc.teamcode.Commands.DriveToLaunchZone;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 
-@TeleOp(group = "Test", name = "Test op mode")
+@TeleOp(group = "Test", name = "Test Chassis op mode")
 public class TestChassisOpMode extends CommandOpMode {
     ChassisSubsystem chassis;
     GamepadEx driver = new GamepadEx(gamepad1);
     TelemetryManager telemetryM;
+    ChassisDefaultCommand chassisDefaultCommand;
     @Override
     public void initialize() {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         chassis = new ChassisSubsystem(hardwareMap, telemetryM);
-        chassis.setDefaultCommand(new ChassisDefaultCommand(chassis, telemetryM, driver));
+        chassisDefaultCommand = new ChassisDefaultCommand(chassis, telemetryM, driver);
+        register(chassis);
+        schedule(chassisDefaultCommand);
+        chassis.setDefaultCommand(chassisDefaultCommand);
+
     }
 
     @Override
