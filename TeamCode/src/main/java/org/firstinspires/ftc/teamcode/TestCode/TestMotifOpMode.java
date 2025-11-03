@@ -9,7 +9,10 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Commands.Shoot;
+import org.firstinspires.ftc.teamcode.Commands.ShootMotif;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDefaultCommand;
+import org.firstinspires.ftc.teamcode.OI;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
@@ -19,14 +22,17 @@ public class TestMotifOpMode extends CommandOpMode {
     ShooterSubsystem snap, crackle, pop;
     IntakeSubsystem intake;
     ShooterDefaultCommand snapDefault, crackleDefault, popDefault;
+    OI oi;
     GamepadEx operator = new GamepadEx(gamepad2);
+    GamepadEx driver = new GamepadEx(gamepad1);
     TelemetryManager telemetryM;
     char[] motif = {'p', 'p', 'g'};
+    boolean shootMotif = true;
 
     @Override
     public void initialize() {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
-
+        oi = new OI(driver, operator);
         intake = new IntakeSubsystem(hardwareMap, telemetryM);
         snap = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.SNAP);
         pop = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.POP);
@@ -51,9 +57,16 @@ public class TestMotifOpMode extends CommandOpMode {
         snap.colour = intake.whatBallsDoWeHave()[0];
         crackle.colour = intake.whatBallsDoWeHave()[1];
         pop.colour = intake.whatBallsDoWeHave()[2];
-        Button shooterButton = new GamepadButton(
-                operator, GamepadKeys.Button.RIGHT_BUMPER
+
+        if(oi.toggleMotif()){
+            shootMotif = !shootMotif;
+        }
+
+        oi.shooterButton().whenPressed(
+                new Shoot(snap, crackle, pop, motif, shootMotif)
         );
+        telemetryM.debug("Shooting Motifs", shootMotif);
+        telemetryM.update();
 
 
     }

@@ -17,11 +17,12 @@ import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 @TeleOp(group = "Test", name = "Test Chassis op mode")
 public class TestChassisOpMode extends CommandOpMode {
     ChassisSubsystem chassis;
-    GamepadEx driver = new GamepadEx(gamepad1);
+    GamepadEx driver;
     TelemetryManager telemetryM;
     ChassisDefaultCommand chassisDefaultCommand;
     @Override
     public void initialize() {
+        driver = new GamepadEx(gamepad1);
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         chassis = new ChassisSubsystem(hardwareMap, telemetryM);
         chassisDefaultCommand = new ChassisDefaultCommand(chassis, telemetryM, driver);

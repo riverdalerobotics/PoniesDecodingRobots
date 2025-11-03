@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * Constants file for the entire robot system
@@ -11,21 +13,22 @@ public final class RobotConstants {
     // === HARDWARE CONFIGURATION ===
 
     public static final class Hardware {
+        // Sensor names
+        public static final String OTOS_SENSOR = "sensor_otos";
+        public static final String LIME_LIGHT = "limelight";
+        public static final String[] COLOUR_SENSORS = {"LeftColourSensor", "MidColourSensor", "RightColourSensor"};
         // Motor names in hardware configuration
         public static final String FRONT_LEFT_MOTOR = "frontLeft";
         public static final String FRONT_RIGHT_MOTOR = "frontRight";
         public static final String BACK_LEFT_MOTOR = "backLeft";
         public static final String BACK_RIGHT_MOTOR = "backRight";
         public static final String INTAKE_MOTOR = "Intake Motor";
-        public static final String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder"};
-        public static final String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder"};
-        public static final String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder"};
+        public static final String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder", "F", COLOUR_SENSORS[0]};
+        public static final String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder", "T", COLOUR_SENSORS[1]};
+        public static final String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder", "T", COLOUR_SENSORS[2]};
 
 
-        // Sensor names
-        public static final String OTOS_SENSOR = "sensor_otos";
-        public static final String LIME_LIGHT = "limelight";
-        public static final String[] COLOUR_SENSORS = {"LeftColourSensor", "MidColourSensor", "RightColourSensor"};
+
         // Motor specifications
         public static final Motor.GoBILDA DRIVE_MOTOR_TYPE = Motor.GoBILDA.RPM_435;
         public static final Motor.GoBILDA INTAKE_MOTOR_TYPE = Motor.GoBILDA.RPM_435;
@@ -44,6 +47,18 @@ public final class RobotConstants {
         //Limelight Pipelines
         public static final int APRIL_TAG_PIPELINE = 0;
         public static final int INTAKE_PIPELINE = 1;
+
+        //Mechanum thing
+        public static MecanumConstants driveConstants = new MecanumConstants()
+                .maxPower(1)
+                .rightFrontMotorName(RobotConstants.Hardware.FRONT_RIGHT_MOTOR)
+                .rightRearMotorName(RobotConstants.Hardware.BACK_RIGHT_MOTOR)
+                .leftRearMotorName(RobotConstants.Hardware.BACK_LEFT_MOTOR)
+                .leftFrontMotorName(RobotConstants.Hardware.FRONT_LEFT_MOTOR)
+                .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+                .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+                .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+                .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     // === PHYSICAL ROBOT DIMENSIONS ===
@@ -152,6 +167,7 @@ public final class RobotConstants {
         public static final double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static final double INTAKE_Y_ANGLE_CHASSIS = 0d;
         public static final double SHOOTER_SPEED = 0d;
+        public static final double INTAKE_SPEED = 0d;
 
         //Timers
         public static  final long SHOOTER_TIMER = 0;

@@ -7,17 +7,22 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.List;
 
 public class ChassisSubsystem extends SubsystemBase {
     TelemetryManager telemetry;
@@ -27,6 +32,7 @@ public class ChassisSubsystem extends SubsystemBase {
     MecanumDrive drive;
     SparkFunOTOS otos;//edit
     LLResult LLresults;
+    public int id;
     public Pose currentPos = new Pose(0, 0, 0);
     public ChassisSubsystem(HardwareMap hardwareMap, TelemetryManager telemetry){
         limelight = new LLsubsystem(hardwareMap).limelight;
@@ -40,6 +46,7 @@ public class ChassisSubsystem extends SubsystemBase {
         this.follower = Constants.createFollower(hardwareMap);
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         limelight.start();
+        LLresults = limelight.getLatestResult();
     }
 
     public Pose getPose(){
@@ -94,8 +101,8 @@ public class ChassisSubsystem extends SubsystemBase {
         limelight.updateRobotOrientation(getPose().getHeading());
         currentPos = getPose();
         follower.update();
-        telemetry.debug("Position: ", currentPos);
-        telemetry.debug("Position Using LL: ", getPoseLL());
+//        telemetry.debug("Position: ", currentPos);
+//        telemetry.debug("Position Using LL: ", getPoseLL());
         follower.setPose(currentPos);
     }
 

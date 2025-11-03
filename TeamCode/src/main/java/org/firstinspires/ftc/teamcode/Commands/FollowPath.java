@@ -6,16 +6,16 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.paths.PathBuilder;
+import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 
 public class FollowPath extends CommandBase {
-    PathBuilder pathBuilder;
+    PathChain pathChain;
     ChassisSubsystem chassis;
     TelemetryManager telemetry;
-    public FollowPath(PathBuilder pathBuilder, ChassisSubsystem chassis, TelemetryManager telemetry){
-        this.pathBuilder = pathBuilder;
+    public FollowPath(PathChain pathChain, ChassisSubsystem chassis, TelemetryManager telemetry){
+        this.pathChain = pathChain;
         this.chassis = chassis;
         this.telemetry = telemetry;
         addRequirements(chassis);
@@ -24,7 +24,7 @@ public class FollowPath extends CommandBase {
     @Override
     public void initialize() {
         super.initialize();
-        chassis.getFollower().followPath(pathBuilder.build());
+        chassis.getFollower().followPath(pathChain);
         telemetry.debug("Following Path, ROBOT IS MOVING");
         follower.update();
         drawCurrent();

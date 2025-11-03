@@ -22,19 +22,19 @@ public class ShootMotif extends SequentialCommandGroup {
         orderedShooters.add(snap);
         orderedShooters.add(crackle);
         orderedShooters.add(pop);
+
+
         for(char motifSpot : ppg){
-            boolean hasBeenFound = false;
-            for(ShooterSubsystem shooter: shooters){
-                if(motifSpot == shooter.colour && !hasBeenFound){
+            shooters.forEach(shooter -> {
+                if(motifSpot == shooter.colour){
+                    orderedShooters.remove(shooter);
                     orderedShooters.add(shooter);
-                    shooters.remove(shooter);
-                    hasBeenFound = true;
                 }
-            }
+            });
         }
 
         if(motif == gpp){
-            addCommands(new ShootGPP(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
+                addCommands(new ShootGPP(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
         } else if (motif == ppg) {
             addCommands(new ShootPPG(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
         }else{
