@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
@@ -11,10 +12,12 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class ShooterDefaultCommand extends CommandBase{
     ShooterSubsystem shooter;
-    LLResult limelight;
-    public ShooterDefaultCommand(ShooterSubsystem shooter){
+    Gamepad op;
+    public ShooterDefaultCommand(ShooterSubsystem shooter, Gamepad op){
         this.shooter = shooter;
-        limelight = shooter.getLLResult();
+        this.op = op;
+        addRequirements(shooter);
+
     }
 
     @Override
@@ -27,11 +30,18 @@ public class ShooterDefaultCommand extends CommandBase{
     @Override
     public void execute() {
         super.execute();
-        if(limelight.isValid() && limelight != null){
-            shooter.setHoodAngle(RobotConstants.clamp(limelight.getTa()*RobotConstants.Tuning.TA_TO_ANGLE, 0, 50));
-        }else{
+        if(op.a){
             shooter.setHoodAngle(0);
         }
+        if(op.b){
+            shooter.setHoodAngle(0.25);
+        }
+        if(op.x){
+            shooter.setHoodAngle(0.5);
+        }
+        shooter.setHoodAngle(0);
+        shooter.setHoodAngle(op.left_stick_y);
+
 
     }
 }

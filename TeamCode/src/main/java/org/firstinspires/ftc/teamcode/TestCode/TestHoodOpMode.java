@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TestCode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -14,28 +15,25 @@ import org.firstinspires.ftc.teamcode.Commands.ShooterDefaultCommand;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-@TeleOp(group = "Test", name = "Hood Test")
+@TeleOp(group = "Test", name = "Hood Test 1")
 public class TestHoodOpMode extends CommandOpMode {
-    ShooterSubsystem snap, crackle, pop;
-    ShooterDefaultCommand snapDefault, crackleDefault, popDefault;
-    GamepadEx operator = new GamepadEx(gamepad2);
+    ShooterSubsystem snap;
+    ShooterDefaultCommand snapDefault;
+    Gamepad gamepad;
     TelemetryManager telemetryM;
 
     @Override
     public void initialize(){
+
         snap = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.SNAP);
-        crackle = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.CRACKLE);
-        pop = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.POP);
-        snapDefault = new ShooterDefaultCommand(snap);
-        crackleDefault = new ShooterDefaultCommand(crackle);
-        popDefault = new ShooterDefaultCommand(pop);
 
-        register(snap, crackle, pop);
-        schedule(snapDefault, crackleDefault, popDefault);
+        snapDefault = new ShooterDefaultCommand(snap, gamepad1);
 
-        snap.setDefaultCommand(snapDefault);
-        crackle.setDefaultCommand(crackleDefault);
-        pop.setDefaultCommand(popDefault);
+
+        register(snap);
+        schedule(snapDefault);
+
+        CommandScheduler.getInstance().setDefaultCommand(snap, snapDefault);
     }
 
     @Override

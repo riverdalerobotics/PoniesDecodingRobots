@@ -25,7 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shootMotor = new Motor(hardwareMap, shooter[0]);
         hoodServo = hardwareMap.get(Servo.class, shooter[1]);
         feedServo = hardwareMap.get(Servo.class, shooter[2]);
-        limelight = new LLsubsystem(hardwareMap).getLimelight();
+//        limelight = new LLsubsystem(hardwareMap).getLimelight();
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
             shootMotor.setInverted(false);
@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shootMotor.set(speed*RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
     }
     public void setHoodAngle(double angle){
-        hoodServo.setPosition(angle*RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);
+        hoodServo.setPosition(angle);
     }
     public void feedShoot(){
         feedServo.setPosition(0.2);
@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
         feedServo.setPosition(0);
     }
     public double getHoodAngle(){
-        return hoodServo.getPosition()/RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO;
+        return hoodServo.getPosition();
     }
     public LLResult getLLResult(){
         return limelight.getLatestResult();
@@ -74,5 +74,6 @@ public class ShooterSubsystem extends SubsystemBase {
         telemetry.debug(shooter[0]+"Shooter speed" ,shootMotor.getCorrectedVelocity());
         telemetry.debug(shooter[0]+"Hood Angle", hoodServo.getPosition()/RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);
         telemetry.debug(shooter[0]+"Colour", colour);
+        telemetry.update();
     }
 }
