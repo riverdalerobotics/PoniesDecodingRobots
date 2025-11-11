@@ -96,6 +96,9 @@ public class ChassisSubsystem extends SubsystemBase {
         return follower;
     }
 
+    public LLResult getLLResult(){
+        return limelight.getLatestResult();
+    }
     @Override
     public void periodic(){
         limelight.updateRobotOrientation(getPose().getHeading());

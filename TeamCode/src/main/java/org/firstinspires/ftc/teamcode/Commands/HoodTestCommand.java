@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.hardware.Gamepad;
+import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
-import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-public class ShooterDefaultCommand extends CommandBase{
+public class HoodTestCommand extends CommandBase{
     ShooterSubsystem shooter;
-    GamepadEx op;
-    public ShooterDefaultCommand(ShooterSubsystem shooter, GamepadEx op){
+
+    TelemetryManager telemetryManager;
+    public HoodTestCommand(ShooterSubsystem shooter, TelemetryManager telemetryManager){
         this.shooter = shooter;
-        this.op = op;
+        this.telemetryManager = telemetryManager;
         addRequirements(shooter);
 
     }
@@ -25,18 +21,24 @@ public class ShooterDefaultCommand extends CommandBase{
     @Override
     public void initialize() {
         super.initialize();
-        shooter.rampToSpeed(0);
-        shooter.resetFeed();
-        shooter.setHoodAngle(0.1);
+        telemetryManager.addLine("THIS IS INIT");
     }
 
     @Override
     public void execute() {
         super.execute();
+        telemetryManager.addLine("RHOTHOHT");
         if(shooter.getLLResult().isValid()){
             shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), 0, 0.1));
+        } else{
+            shooter.setHoodAngle(0.1);
         }
 
 
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

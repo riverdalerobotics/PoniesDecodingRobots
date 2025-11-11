@@ -1,0 +1,55 @@
+package org.firstinspires.ftc.teamcode.Commands;
+
+import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.geometry.Pose;
+
+import org.firstinspires.ftc.teamcode.RobotConstants;
+import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
+
+public class ChassisLookToAprilTag extends CommandBase {
+    ChassisSubsystem chassisSubsystem;
+    LLsubsystem limer;
+    PIDController hPID;
+    TelemetryManager telemetryManager;
+    double targetAngle;
+    GamepadEx driver;
+    public ChassisLookToAprilTag(ChassisSubsystem cSubsystem, LLsubsystem limelight, TelemetryManager telemetryManager, double targetAngle, GamepadEx driver){
+        chassisSubsystem = cSubsystem;
+        this.driver = driver;
+        this.telemetryManager = telemetryManager;
+        limer = limelight;
+        this.targetAngle = targetAngle;
+        this.hPID = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[2]);
+        addRequirements(cSubsystem);
+    }
+
+    @Override
+    public void initialize(){
+        super.initialize();
+        hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
+        hPID.setSetPoint(targetAngle);
+    }
+
+    @Override
+    public void execute(){
+        super.execute();
+        double speed = RobotConstants.clamp(hPID.calculate(limer.getLLResults().getTx()), -1, 1);
+        telemetryManager.addData("Chassis h Speed", speed);
+        chassisSubsystem.driveRobotOriented(driver.getLeftX(), driver.getLeftY(), speed);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        hPID.reset();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return hPID.atSetPoint();
+    }
+}

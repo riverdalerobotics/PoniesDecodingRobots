@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.telemetry.TelemetryManager;
@@ -25,7 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shootMotor = new Motor(hardwareMap, shooter[0]);
         hoodServo = hardwareMap.get(Servo.class, shooter[1]);
         feedServo = hardwareMap.get(Servo.class, shooter[2]);
-//        limelight = new LLsubsystem(hardwareMap).getLimelight();
+        limelight = new LLsubsystem(hardwareMap).getLimelight();
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
             shootMotor.setInverted(false);
@@ -34,12 +36,15 @@ public class ShooterSubsystem extends SubsystemBase {
         }
         this.shooter = shooter;
     }
-
+    public Servo getHoodServo(){
+        return hoodServo;
+    }
     public void rampToSpeed(double speed){
         shootMotor.set(speed*RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
     }
     public void setHoodAngle(double angle){
         hoodServo.setPosition(angle);
+        telemetry.addLine("JKLJLKGJLKGJ");
     }
     public void feedShoot(){
         feedServo.setPosition(0.2);
@@ -74,6 +79,5 @@ public class ShooterSubsystem extends SubsystemBase {
         telemetry.debug(shooter[0]+"Shooter speed" ,shootMotor.getCorrectedVelocity());
         telemetry.debug(shooter[0]+"Hood Angle", hoodServo.getPosition()/RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);
         telemetry.debug(shooter[0]+"Colour", colour);
-        telemetry.update();
     }
 }

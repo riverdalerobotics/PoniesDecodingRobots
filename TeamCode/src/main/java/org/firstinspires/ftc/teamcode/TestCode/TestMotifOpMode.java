@@ -37,9 +37,9 @@ public class TestMotifOpMode extends CommandOpMode {
         snap = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.SNAP);
         pop = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.POP);
         crackle  = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.CRACKLE);
-        snapDefault = new ShooterDefaultCommand(snap, gamepad1);
-        crackleDefault = new ShooterDefaultCommand(crackle, gamepad1);
-        popDefault = new ShooterDefaultCommand(pop, gamepad1);
+        snapDefault = new ShooterDefaultCommand(snap, operator);
+        crackleDefault = new ShooterDefaultCommand(crackle, operator);
+        popDefault = new ShooterDefaultCommand(pop, operator);
 
 
         register(snap, crackle, pop);
