@@ -31,15 +31,19 @@ public class ChassisLookToAprilTag extends CommandBase {
     public void initialize(){
         super.initialize();
         hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
-        hPID.setSetPoint(targetAngle);
+        hPID.setSetPoint(RobotConstants.Tuning.POINT_AT_AT_TARGET);
     }
 
     @Override
     public void execute(){
         super.execute();
-        double speed = RobotConstants.clamp(hPID.calculate(limer.getLLResults().getTx()), -1, 1);
-        telemetryManager.addData("Chassis h Speed", speed);
-        chassisSubsystem.driveRobotOriented(driver.getLeftX(), driver.getLeftY(), speed);
+        if(limer.getLLResults().isValid()) {
+            double speed = RobotConstants.clamp(hPID.calculate(limer.getLLResults().getTx()), -1, 1);
+            telemetryManager.addData("Chassis h Speed", speed);
+            chassisSubsystem.driveRobotOriented(driver.getLeftX(), -driver.getLeftY(), speed);
+        }else{
+            chassisSubsystem.driveRobotOriented(driver.getLeftX(), -driver.getLeftY(), driver.getRightX());
+        }
     }
 
     @Override

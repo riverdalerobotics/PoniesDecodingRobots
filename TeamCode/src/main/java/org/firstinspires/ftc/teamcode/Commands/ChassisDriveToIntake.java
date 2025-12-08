@@ -26,7 +26,7 @@ public class ChassisDriveToIntake extends CommandBase {
         xPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
         yPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
 
-        chassis.selectPipeline(RobotConstants.Hardware.INTAKE_PIPELINE);
+//        chassis.selectPipeline(RobotConstants.Hardware.INTAKE_PIPELINE);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ChassisDriveToIntake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        chassis.selectPipeline(RobotConstants.Hardware.APRIL_TAG_PIPELINE);
+//        chassis.selectPipeline(RobotConstants.Hardware.APRIL_TAG_PIPELINE);
         xPid.reset();
         yPid.reset();
     }

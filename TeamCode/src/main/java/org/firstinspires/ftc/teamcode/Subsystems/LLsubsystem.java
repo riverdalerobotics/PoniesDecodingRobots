@@ -13,6 +13,7 @@ public class LLsubsystem {
     Limelight3A limelight;
     public LLsubsystem(HardwareMap hardwareMap){
         limelight = hardwareMap.get(Limelight3A.class, RobotConstants.Hardware.LIME_LIGHT);
+        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         limelight.start();
     }
 

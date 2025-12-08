@@ -22,7 +22,7 @@ public class Constants {
             .hardwareMapName(RobotConstants.Hardware.OTOS_SENSOR)
             .offset(new SparkFunOTOS.Pose2D(2, 0, 90))
             .linearUnit(DistanceUnit.INCH)
-            .angleUnit(AngleUnit.RADIANS);
+            .angleUnit(AngleUnit.DEGREES);
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .OTOSLocalizer(localizerConstants)

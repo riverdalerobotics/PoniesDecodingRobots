@@ -30,9 +30,9 @@ public class ShooterSubsystem extends SubsystemBase {
         limelight = new LLsubsystem(hardwareMap).getLimelight();
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
-            shootMotor.setInverted(false);
-        }else{
             shootMotor.setInverted(true);
+        }else{
+            shootMotor.setInverted(false);
         }
         this.shooter = shooter;
     }
@@ -47,10 +47,11 @@ public class ShooterSubsystem extends SubsystemBase {
         telemetry.addLine("JKLJLKGJLKGJ");
     }
     public void feedShoot(){
-        feedServo.setPosition(0.2);
-    }
-    public void resetFeed(){
         feedServo.setPosition(0);
+    }
+    public void resetFeed()
+    {
+        feedServo.setPosition(0.2);
     }
     public double getHoodAngle(){
         return hoodServo.getPosition();

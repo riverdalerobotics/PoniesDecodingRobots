@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
@@ -16,6 +17,7 @@ public class RobotConstants {
     @Configurable
     public static   class Hardware {
         // Sensor names
+        public static SparkFunOTOS.Pose2D OTOS_OFFSET = new SparkFunOTOS.Pose2D(0,0,0);
         public static   String OTOS_SENSOR = "sensor_otos";
         public static   String LIME_LIGHT = "limelight";
         public static   String[] COLOUR_SENSORS = {"LeftColourSensor", "MidColourSensor", "RightColourSensor"};
@@ -38,7 +40,8 @@ public class RobotConstants {
 
         //Gear Ratios
         public static   double HOOD_SERVO_GEAR_RATIO = 0d;
-        public static   double SHOOTER_WHEEL_GEAR_RATIO = 0d;
+        public static   double SHOOTER_WHEEL_GEAR_RATIO = 1;
+        public static double SHOOTER_WHEEL_CONVERSION = 0.43;
 
         // Motor directions (adjust based on your robot)
         public static   boolean FRONT_LEFT_REVERSED = false;
@@ -147,7 +150,7 @@ public class RobotConstants {
     }
 
     // === TELEOP CONTROL SETTINGS ===
-
+    @Configurable
     public static   class Teleop {
         // Joystick deadzone
         public static   double DRIVE_DEADZONE = 0.1;
@@ -168,15 +171,19 @@ public class RobotConstants {
         //Setpoints
         public static   double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static   double INTAKE_Y_ANGLE_CHASSIS = 0d;
-        public static   double SHOOTER_SPEED = 0d;
+        public static   double SHOOTER_SPEED = 1;
         public static   double INTAKE_SPEED = 0d;
 
         //Timers
-        public static    long SHOOTER_TIMER = 0;
+        public static    long SHOOTER_TIMER = 1000;
 
         //The rest
         public static   double[] WHITE_RGB = {0, 0, 0};
         public static   double INTAKE_MIN = 100;
+        public static double CLOSE_SHOT_THRESHOLD = 1;
+        public static double CLOSE_SHOT = 0.875;
+        public static double VERY_CLOSE_SHOT = 0.8;
+        public static double FAR_SHOT = 0.95;
         public static   double WHITE_THRESHOLD = 20;
     }
 
@@ -260,11 +267,14 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static   double[] CHASSIS_PID_COEFFICIENTS = {0d, 0d, 0d};
-        public static   double CHASSIS_TOLERANCE = 0d;
+        public static   double[] CHASSIS_PID_COEFFICIENTS = {-0.04, 0d, 0d};
+        public static   double CHASSIS_TOLERANCE = 5;
 
         //Other coefficients
-        public static   double TA_TO_ANGLE = 0.01;
+        public static double POINT_AT_AT_TARGET = 0;
+        public static   double TA_TO_ANGLE = 0.06;
+        public static double MAX_ANGLE = 0.15;
+        public static double MIN_ANGLE = 0;
     }
 
     // === SAFETY LIMITS ===
