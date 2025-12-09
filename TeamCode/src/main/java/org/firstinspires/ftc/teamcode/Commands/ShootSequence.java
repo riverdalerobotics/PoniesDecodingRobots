@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class ShootSequence extends SequentialCommandGroup {
     public ShootSequence(ShooterSubsystem shooter){
-        addCommands(new ParallelDeadlineGroup(new Timer(RobotConstants.Teleop.SHOOTER_TIMER), new RevUpToShoot(shooter)), new ParallelDeadlineGroup(new Timer(200L), new FeedShooter(shooter)));
+        addCommands(new ParallelDeadlineGroup(new Timer(RobotConstants.Teleop.SHOOTER_TIMER), new RevUpToShoot(shooter)), new ParallelDeadlineGroup(new Timer(RobotConstants.Teleop.HOLD_THE_ARM), new FeedShooter(shooter)));
         addRequirements(shooter);
     }
 }

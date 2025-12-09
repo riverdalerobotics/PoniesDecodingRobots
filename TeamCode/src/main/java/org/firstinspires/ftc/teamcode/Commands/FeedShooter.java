@@ -12,8 +12,6 @@ public class FeedShooter extends CommandBase {
     public FeedShooter(ShooterSubsystem shooter){
         this.shooter = shooter;
 
-        addRequirements(shooter);
-
     }
 
     @Override
@@ -29,8 +27,4 @@ public class FeedShooter extends CommandBase {
         shooter.resetFeed();
     }
 
-    @Override
-    public boolean isFinished() {
-        return true;
     }
-}

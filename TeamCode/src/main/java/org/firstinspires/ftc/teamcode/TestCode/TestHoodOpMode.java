@@ -31,7 +31,7 @@ public class TestHoodOpMode extends CommandOpMode {
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         snap = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.SNAP);
 
-        snapDefault = new ShooterDefaultCommand(snap, gamepad);
+        snapDefault = new ShooterDefaultCommand(snap);
 
 
 

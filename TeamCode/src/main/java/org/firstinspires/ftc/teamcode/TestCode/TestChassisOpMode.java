@@ -7,6 +7,8 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultFEILDCommand;
 import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultROBOTCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 
@@ -17,7 +19,7 @@ public class TestChassisOpMode extends CommandOpMode {
     GamepadEx driver;
     TelemetryManager telemetryM;
 //    ShooterDefaultCommand shooterDefault;
-    ChassisDefaultROBOTCommand chassisDefaultCommand;
+    ChassisDefaultFEILDCommand chassisDefaultCommand;
 //    ShooterSubsystem shooterSubsystem;
 //    LLsubsystem limelight;
 
@@ -28,7 +30,7 @@ public class TestChassisOpMode extends CommandOpMode {
 //        limelight = new LLsubsystem(hardwareMap);
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         chassis = new ChassisSubsystem(hardwareMap, telemetryM);
-        chassisDefaultCommand = new ChassisDefaultROBOTCommand(chassis, telemetryM, driver);
+        chassisDefaultCommand = new ChassisDefaultFEILDCommand(chassis, telemetryM, driver);
 //        shooterDefault = new ShooterDefaultCommand(shooterSubsystem, driver);
         register(chassis);
         schedule(chassisDefaultCommand);
@@ -51,6 +53,7 @@ public class TestChassisOpMode extends CommandOpMode {
 //        ).whenPressed(
 //                new ChassisLookToAprilTag(chassis, limelight, telemetryM, 0, driver)
 //        );
+        telemetryM.addData("yaw", chassis.yawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         telemetryM.update();
     }
 }

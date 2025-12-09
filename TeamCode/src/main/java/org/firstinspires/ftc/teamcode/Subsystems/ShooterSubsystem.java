@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.telemetry.TelemetryManager;
@@ -39,6 +40,17 @@ public class ShooterSubsystem extends SubsystemBase {
     public Servo getHoodServo(){
         return hoodServo;
     }
+    public double getSpeed(){
+        return shootMotor.getCorrectedVelocity();
+    }
+    public void setSpeed(double speed){
+        shootMotor.setRunMode(Motor.RunMode.VelocityControl);
+        shootMotor.setVeloCoefficients(RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[0],
+                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[1],
+                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[2]);
+        shootMotor.set(speed);
+    }
+
     public void rampToSpeed(double speed){
         shootMotor.set(speed*RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
     }

@@ -1,25 +1,24 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-public class ShooterDefaultCommand extends CommandBase{
+public class RevUpToSpeed extends CommandBase {
     ShooterSubsystem shooter;
-    public ShooterDefaultCommand(ShooterSubsystem shooter){
+    Timing.Timer timer;
+    public RevUpToSpeed(ShooterSubsystem shooter){
         this.shooter = shooter;
-
         addRequirements(shooter);
+        timer = new Timing.Timer(RobotConstants.Teleop.SHOOTER_TIMER);
     }
-
     @Override
     public void initialize() {
         super.initialize();
-        shooter.rampToSpeed(0);
-        shooter.resetFeed();
-        shooter.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
+
+        timer.start();
     }
 
     @Override
@@ -27,17 +26,21 @@ public class ShooterDefaultCommand extends CommandBase{
         super.execute();
         if(shooter.getLLResult().isValid()){
             if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
-                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.CLOSE_SHOT;
-            }else{
                 RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.FAR_SHOT;
+            }else{
+                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.CLOSE_SHOT;
             }
 
-            shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), RobotConstants.Tuning.MIN_ANGLE, RobotConstants.Tuning.MAX_ANGLE));
+            shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
         }else{
             shooter.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
             RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.VERY_CLOSE_SHOT;
         }
+        shooter.rampToSpeed(RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
+    }
 
-
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

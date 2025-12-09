@@ -14,12 +14,15 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -33,6 +36,7 @@ public class ChassisSubsystem extends SubsystemBase {
     MecanumDrive drive;
     SparkFunOTOS otos;//edit
     LLResult LLresults;
+    IMU imu;
     public int id;
     public Pose currentPos = new Pose(0, 0, 0);
 
@@ -50,6 +54,15 @@ public class ChassisSubsystem extends SubsystemBase {
         this.follower = Constants.createFollower(hardwareMap);
         otos.setAngularUnit(AngleUnit.DEGREES);
         otos.setOffset(RobotConstants.Hardware.OTOS_OFFSET);
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
+                                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                        )
+                )
+        );
 //        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
 //        limelight.start();
 //        LLresults = limelight.getLatestResult();
@@ -79,7 +92,9 @@ public class ChassisSubsystem extends SubsystemBase {
                 -(getPoseLL().getPosition().x + 72) / 39.3701,
                 getPose().getHeading());
     }
-
+    public YawPitchRollAngles yawPitchRollAngles(){
+        return imu.getRobotYawPitchRollAngles();
+    }
     //    public void selectPipeline(int pipeline){
 //        limelight.pipelineSwitch(pipeline);
 //    }
@@ -88,7 +103,7 @@ public class ChassisSubsystem extends SubsystemBase {
     }
 
     public void driveFieldOriented(double strafeSpeed, double forwardSpeed, double turn) {
-        drive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, getPose().getHeading(), false);
+        drive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), false);
     }
 
     public void stop() {

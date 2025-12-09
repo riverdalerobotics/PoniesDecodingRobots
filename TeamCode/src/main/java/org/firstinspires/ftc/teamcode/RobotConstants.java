@@ -175,7 +175,9 @@ public class RobotConstants {
         public static   double INTAKE_SPEED = 0d;
 
         //Timers
-        public static    long SHOOTER_TIMER = 1000;
+        public static long SHOOTER_TIMER = 3000;
+        public static long HOLD_THE_ARM = 500;
+        public static long DRIVE_FORWARD_AUTO = 1000;
 
         //The rest
         public static   double[] WHITE_RGB = {0, 0, 0};
@@ -267,11 +269,13 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static   double[] CHASSIS_PID_COEFFICIENTS = {-0.04, 0d, 0d};
+        public static double[] SHOOTER_PID_COEFFICIENTS = {0, 0, 0};
+        public static   double[] CHASSIS_PID_COEFFICIENTS = {0.04, 0.01, 0d};
         public static   double CHASSIS_TOLERANCE = 5;
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;
+        public static double POINT_AT_AT_TARGET_AUTO = 0;
         public static   double TA_TO_ANGLE = 0.06;
         public static double MAX_ANGLE = 0.15;
         public static double MIN_ANGLE = 0;
