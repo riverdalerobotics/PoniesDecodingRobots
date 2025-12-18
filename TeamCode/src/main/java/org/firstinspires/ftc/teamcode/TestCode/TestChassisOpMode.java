@@ -53,7 +53,7 @@ public class TestChassisOpMode extends CommandOpMode {
 //        ).whenPressed(
 //                new ChassisLookToAprilTag(chassis, limelight, telemetryM, 0, driver)
 //        );
-        telemetryM.addData("yaw", chassis.yawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        telemetryM.addData("yaw", chassis.yawPitchRollAngles().getYaw());
         telemetryM.update();
     }
 }

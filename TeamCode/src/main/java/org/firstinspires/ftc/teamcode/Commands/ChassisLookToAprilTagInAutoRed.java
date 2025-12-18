@@ -2,27 +2,24 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 
-public class ChassisLookToAprilTag extends CommandBase {
+public class ChassisLookToAprilTagInAutoRed extends CommandBase {
     ChassisSubsystem chassisSubsystem;
     LLsubsystem limer;
     PIDController hPID;
     TelemetryManager telemetryManager;
     double targetAngle;
-    GamepadEx driver;
     /**
-     * Makes the chassis point to any april tag using a PID controller, doesn't end
+     * Makes the chassis point to any april tag using a PID controller, ends when the chassis is
+     * within CHASSIS_TOLERANCE -> see Robot constants for more
      * */
-    public ChassisLookToAprilTag(ChassisSubsystem cSubsystem, LLsubsystem limelight, TelemetryManager telemetryManager, double targetAngle, GamepadEx driver){
+    public ChassisLookToAprilTagInAutoRed(ChassisSubsystem cSubsystem, LLsubsystem limelight, TelemetryManager telemetryManager, double targetAngle){
         chassisSubsystem = cSubsystem;
-        this.driver = driver;
         this.telemetryManager = telemetryManager;
         limer = limelight;
         this.targetAngle = targetAngle;
@@ -34,7 +31,7 @@ public class ChassisLookToAprilTag extends CommandBase {
     public void initialize(){
         super.initialize();
         hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
-        hPID.setSetPoint(RobotConstants.Tuning.POINT_AT_AT_TARGET);
+        hPID.setSetPoint(RobotConstants.Tuning.POINT_AT_AT_TARGET_AUTO);
     }
 
     @Override
@@ -43,9 +40,9 @@ public class ChassisLookToAprilTag extends CommandBase {
         if(limer.getLLResults().isValid()) {
             double speed = RobotConstants.clamp(hPID.calculate(limer.getLLResults().getTx()), -1, 1);
             telemetryManager.addData("Chassis h Speed", speed);
-            chassisSubsystem.fieldOriented(-driver.getLeftX(), -driver.getLeftY(), -speed);
+            chassisSubsystem.driveRobotOriented(0, 0, speed);
         }else{
-            chassisSubsystem.fieldOriented(-driver.getLeftX(), -driver.getLeftY(), -driver.getRightX());
+            chassisSubsystem.driveRobotOriented(0,0, 0.1);
         }
     }
 
@@ -55,4 +52,8 @@ public class ChassisLookToAprilTag extends CommandBase {
         hPID.reset();
     }
 
+    @Override
+    public boolean isFinished() {
+        return hPID.atSetPoint();
+    }
 }

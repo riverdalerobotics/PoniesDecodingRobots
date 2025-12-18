@@ -10,6 +10,9 @@ public class ChassisDefaultFEILDCommand extends CommandBase {
     ChassisSubsystem chassis;
     TelemetryManager telemetry;
     GamepadEx gamepad;
+    /**
+     * Chassis default command that makes it the chassis drives using field oriented
+     * */
     public ChassisDefaultFEILDCommand(ChassisSubsystem chassis, TelemetryManager telemetry, GamepadEx gamepad){
         this.chassis = chassis;
         this.telemetry = telemetry;
@@ -20,7 +23,7 @@ public class ChassisDefaultFEILDCommand extends CommandBase {
     @Override
     public void execute() {
         super.execute();
-        chassis.driveFieldOriented(gamepad.getLeftX(), -gamepad.getLeftY(), gamepad.getRightX());
+        chassis.fieldOriented(-gamepad.getLeftX(), -gamepad.getLeftY(), -gamepad.getRightX());
         telemetry.addLine("Chassis default is running");
 
     }

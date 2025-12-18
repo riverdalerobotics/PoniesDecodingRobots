@@ -37,14 +37,16 @@ public class ChassisSubsystem extends SubsystemBase {
     SparkFunOTOS otos;//edit
     LLResult LLresults;
     IMU imu;
+    HardwareMap hardwareMap;
     public int id;
     public Pose currentPos = new Pose(0, 0, 0);
 
     public ChassisSubsystem(HardwareMap hardwareMap, TelemetryManager telemetry) {
         // limelight = new LLsubsystem(hardwareMap).limelight;
+        this.hardwareMap = hardwareMap;
         fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
-        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
-        br = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         otos = hardwareMap.get(SparkFunOTOS.class, RobotConstants.Hardware.OTOS_SENSOR);
         fl.setInverted(true);
@@ -52,14 +54,15 @@ public class ChassisSubsystem extends SubsystemBase {
         this.drive = new MecanumDrive(fl, fr, bl, br);
         this.telemetry = telemetry;
         this.follower = Constants.createFollower(hardwareMap);
-        otos.setAngularUnit(AngleUnit.DEGREES);
+        otos.setAngularUnit(AngleUnit.RADIANS);
         otos.setOffset(RobotConstants.Hardware.OTOS_OFFSET);
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
-                                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                                //TODO: ENSURE THIS IS FIXED PRE COMP
+                                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
                         )
                 )
         );
@@ -67,10 +70,29 @@ public class ChassisSubsystem extends SubsystemBase {
 //        limelight.start();
 //        LLresults = limelight.getLatestResult();
     }
-    public void resetPos(){
-        otos.begin();
-        otos.setPosition(new SparkFunOTOS.Pose2D(0,0,0));
+    public void initBlue(){
+        new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        //TODO: ENSURE THIS IS FIXED PRE COMP
+                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                )
+        );
     }
+    public void initRed(){
+        new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        //TODO: ENSURE THIS IS FIXED PRE COMP
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                )
+        );
+    }
+
+    public void resetPos(){
+        imu.resetYaw();
+    }
+
     public Pose getPose() {
         return new Pose(otos.getPosition().x, otos.getPosition().y, otos.getPosition().h*6);
     }
@@ -99,11 +121,38 @@ public class ChassisSubsystem extends SubsystemBase {
 //        limelight.pipelineSwitch(pipeline);
 //    }
     public void driveRobotOriented(double strafeSpeed, double forwardSpeed, double turn) {
-        drive.driveRobotCentric(strafeSpeed, turn, forwardSpeed, true);
-    }
+        fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        br = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        drive = new MecanumDrive(fl, fr, bl, br);
+        drive.driveRobotCentric(strafeSpeed, turn, forwardSpeed, false);
 
+    }
     public void driveFieldOriented(double strafeSpeed, double forwardSpeed, double turn) {
-        drive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), false);
+        fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        drive = new MecanumDrive(fl, fr, bl, br);
+        fl.setInverted(false);
+        bl.setInverted(false);
+        drive.driveFieldCentric(strafeSpeed, -forwardSpeed, turn, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES), false);
+    }
+    public void fieldOriented(double strafeSpeed, double forwardSpeed, double turn) {
+        double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // calculated from IMU
+        fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fr = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        drive = new MecanumDrive(fl, fr, bl, br);
+        fl.setInverted(false);
+        bl.setInverted(false);
+
+        double rotX = (strafeSpeed * Math.cos(yaw)) + (forwardSpeed * Math.sin(yaw));
+        double rotY = (strafeSpeed * Math.sin(yaw)) - (forwardSpeed * Math.cos(yaw));
+        drive.driveRobotCentric(rotX, rotY, turn, false);
+        //field oriented
     }
 
     public void stop() {

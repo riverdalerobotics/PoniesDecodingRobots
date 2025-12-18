@@ -177,16 +177,22 @@ public class RobotConstants {
         //Timers
         public static long SHOOTER_TIMER = 3000;
         public static long HOLD_THE_ARM = 500;
-        public static long DRIVE_FORWARD_AUTO = 1000;
+        public static long DRIVE_FORWARD_AUTO = 500;
+        public static long DRIVE_FORWARD_CLOSE_AUTO = 500;
+
 
         //The rest
         public static   double[] WHITE_RGB = {0, 0, 0};
         public static   double INTAKE_MIN = 100;
         public static double CLOSE_SHOT_THRESHOLD = 1;
-        public static double CLOSE_SHOT = 0.875;
-        public static double VERY_CLOSE_SHOT = 0.8;
-        public static double FAR_SHOT = 0.95;
+        public static double CLOSE_SHOT = 1750;
+        public static double VERY_CLOSE_SHOT = 500;
+        public static double FAR_SHOT = -785;
         public static   double WHITE_THRESHOLD = 20;
+        public static double[] FAR_SHOT_SPEEDS_VOLT = {0.911, 0.925, 0.95, 0.97};
+                //{0.83, 0.91, 0.935, 0.94};
+        public static double[] CLOSE_SHOT_SPEEDS_VOLTS = {0.836, 0.861, 0.866, 0.886};
+                        //{0.8, 0.85, 0.88, 0.9};
     }
 
     // === AUTONOMOUS SETTINGS ===
@@ -269,9 +275,10 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static double[] SHOOTER_PID_COEFFICIENTS = {0, 0, 0};
-        public static   double[] CHASSIS_PID_COEFFICIENTS = {0.04, 0.01, 0d};
-        public static   double CHASSIS_TOLERANCE = 5;
+        public static double[] SHOOTER_PID_COEFFICIENTS = {-6, 0, 0};
+        public static   double[] CHASSIS_PID_COEFFICIENTS = {0.027, 0.005, 0.001};
+        public static   double CHASSIS_TOLERANCE = 1;
+        public static double SHOOTER_TOLERANCE = 0.1;
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;

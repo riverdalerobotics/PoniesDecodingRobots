@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 public class ChassisDefaultAuto extends CommandBase {
     ChassisSubsystem chassis;
     TelemetryManager telemetry;
+    /**
+     * Makes the chassis stay still for auto
+     * */
     public ChassisDefaultAuto(ChassisSubsystem chassis, TelemetryManager telemetry){
         this.chassis = chassis;
         this.telemetry = telemetry;

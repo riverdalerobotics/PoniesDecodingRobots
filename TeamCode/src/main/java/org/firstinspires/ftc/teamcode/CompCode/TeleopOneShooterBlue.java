@@ -1,60 +1,56 @@
-package org.firstinspires.ftc.teamcode.TestCode;
+package org.firstinspires.ftc.teamcode.CompCode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultFEILDCommand;
-import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultROBOTCommand;
 import org.firstinspires.ftc.teamcode.Commands.ChassisLookToAprilTag;
 import org.firstinspires.ftc.teamcode.Commands.CloseShot;
-import org.firstinspires.ftc.teamcode.Commands.FarShot;
 import org.firstinspires.ftc.teamcode.Commands.FeedShooter;
-import org.firstinspires.ftc.teamcode.Commands.RevToVeloUsingPID;
 import org.firstinspires.ftc.teamcode.Commands.RevUpToShoot;
-import org.firstinspires.ftc.teamcode.Commands.Shoot;
-import org.firstinspires.ftc.teamcode.Commands.ShootSequence;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDefaultCommand;
 import org.firstinspires.ftc.teamcode.Commands.Timer;
+import org.firstinspires.ftc.teamcode.OI;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-@TeleOp(group = "Test", name = "Test Teleop")
-public class TestTeleop extends CommandOpMode {
+@TeleOp(group = "Comp", name = "BLUE 1/3 of Celestia")
+public class TeleopOneShooterBlue extends CommandOpMode {
     LLsubsystem limelight;
     ShooterSubsystem snap;
     ChassisSubsystem chassis;
     ChassisDefaultFEILDCommand chassisDefault;
     ShooterDefaultCommand snapDefault;
-    GamepadEx gamepad;
-    CloseShot closeShot;
-    FarShot farShot;
-    RevUpToShoot revShoot;
+    GamepadEx driver;
+    GamepadEx operator;
     TelemetryManager telemetryM;
+    RevUpToShoot revShoot;
+    VoltageSensor voltage;
+    OI oi;
 
     @Override
     public void initialize(){
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         limelight = new LLsubsystem(hardwareMap);
-        gamepad = new GamepadEx(gamepad1);
+        driver = new GamepadEx(gamepad1);
+        operator = new GamepadEx(gamepad2);
+        oi = new OI(driver, operator);
         chassis = new ChassisSubsystem(hardwareMap, telemetryM);
-        chassisDefault = new ChassisDefaultFEILDCommand(chassis, telemetryM, gamepad);
+        chassisDefault = new ChassisDefaultFEILDCommand(chassis, telemetryM, driver);
         snap = new ShooterSubsystem(hardwareMap, telemetryM, RobotConstants.Hardware.SNAP);
         snapDefault = new ShooterDefaultCommand(snap);
         revShoot = new RevUpToShoot(snap);
-        closeShot = new CloseShot(snap);
-        farShot = new FarShot(snap);
-        
+        voltage = hardwareMap.get(VoltageSensor.class, "Control Hub");
+        chassis.initBlue();
 
 
         register(snap, chassis);
@@ -65,37 +61,36 @@ public class TestTeleop extends CommandOpMode {
 
     @Override
     public void run(){
+
         CommandScheduler.getInstance().run();
-
-
-        if(gamepad.isDown(GamepadKeys.Button.START)){
+        if(driver.isDown(GamepadKeys.Button.START)){
             chassis.resetPos();
         }
-        Button rev = new GamepadButton(
-               gamepad, GamepadKeys.Button.RIGHT_BUMPER
-        ).whileHeld(
-               new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT)
+        oi.revButton().whenHeld(revShoot);
+        oi.shooterButton().whenPressed(
+                new ParallelDeadlineGroup(
+                        new Timer(RobotConstants.Teleop.HOLD_THE_ARM),
+                        new FeedShooter(snap))
         );
-                Button shoot = new GamepadButton(
-                gamepad, GamepadKeys.Button.A
-        ).whenPressed(
-                new ParallelDeadlineGroup(new Timer(RobotConstants.Teleop.HOLD_THE_ARM), new FeedShooter(snap))
-        );
-
-        Button pointAtAT = new GamepadButton(
-                gamepad, GamepadKeys.Button.LEFT_BUMPER
-        ).whenHeld(
-                new ChassisLookToAprilTag(chassis, limelight, telemetryM, 5, gamepad)
+        oi.pointAtAT().whenHeld(
+                new ChassisLookToAprilTag(chassis, limelight, telemetryM, 5, driver)
 
         );
-        if(gamepad1.x){
-            gamepad.gamepad.rumble(500);
-        }
-        telemetry.addData("speed", snap.getSpeed());
+        oi.closeShot().whenPressed(
+
+
+
+                                new CloseShot(snap)
+                )
+
+        ;
+
         telemetryM.addData("angle", snap.getHoodAngle());
         telemetryM.addData("yaw", chassis.yawPitchRollAngles().getYaw());
         telemetryM.addData("speed", snap.getSpeed());
+        telemetryM.addData("Shooter Speed", RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
         telemetryM.addData("ta", snap.getLLResult().getTa());
+        telemetry.addData("voltage", voltage.getVoltage());
         telemetryM.update();
         telemetry.update();
     }

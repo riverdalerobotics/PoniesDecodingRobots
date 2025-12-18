@@ -8,7 +8,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class FeedShooter extends CommandBase {
     ShooterSubsystem shooter;
-
+    /**
+     * Moves the shooter feed servo to feed the ball
+     * @param shooter The shooter that will be fed
+     * */
     public FeedShooter(ShooterSubsystem shooter){
         this.shooter = shooter;
 

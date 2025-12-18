@@ -10,6 +10,9 @@ public class ChassisDefaultROBOTCommand extends CommandBase {
     ChassisSubsystem chassis;
     TelemetryManager telemetry;
     GamepadEx gamepad;
+    /**
+     * Chassis default command that makes it the chassis drives using robot oriented
+     * */
     public ChassisDefaultROBOTCommand(ChassisSubsystem chassis, TelemetryManager telemetry, GamepadEx gamepad){
         this.chassis = chassis;
         this.telemetry = telemetry;

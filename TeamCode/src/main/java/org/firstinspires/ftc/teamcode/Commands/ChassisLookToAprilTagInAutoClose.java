@@ -2,20 +2,23 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.bylazar.telemetry.TelemetryManager;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 
-public class ChassisLookToAprilTagInAuto extends CommandBase {
+public class ChassisLookToAprilTagInAutoClose extends CommandBase {
     ChassisSubsystem chassisSubsystem;
     LLsubsystem limer;
     PIDController hPID;
     TelemetryManager telemetryManager;
     double targetAngle;
-    public ChassisLookToAprilTagInAuto(ChassisSubsystem cSubsystem, LLsubsystem limelight, TelemetryManager telemetryManager, double targetAngle){
+    /**
+     * Makes the chassis point to any april tag using a PID controller, ends when the chassis is
+     * within CHASSIS_TOLERANCE -> see Robot constants for more
+     * */
+    public ChassisLookToAprilTagInAutoClose(ChassisSubsystem cSubsystem, LLsubsystem limelight, TelemetryManager telemetryManager, double targetAngle){
         chassisSubsystem = cSubsystem;
         this.telemetryManager = telemetryManager;
         limer = limelight;
@@ -39,7 +42,7 @@ public class ChassisLookToAprilTagInAuto extends CommandBase {
             telemetryManager.addData("Chassis h Speed", speed);
             chassisSubsystem.driveRobotOriented(0, 0, speed);
         }else{
-            chassisSubsystem.driveRobotOriented(0,0, 0.1);
+            chassisSubsystem.driveRobotOriented(0,0.2, 0);
         }
     }
 
@@ -47,6 +50,7 @@ public class ChassisLookToAprilTagInAuto extends CommandBase {
     public void end(boolean interrupted) {
         super.end(interrupted);
         hPID.reset();
+        chassisSubsystem.driveFieldOriented(0,0,0);
     }
 
     @Override

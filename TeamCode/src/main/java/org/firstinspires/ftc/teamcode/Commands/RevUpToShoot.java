@@ -9,6 +9,11 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class RevUpToShoot extends CommandBase {
     ShooterSubsystem shooter;
     Timing.Timer timer;
+    /**
+     * Spins the shooter at a speed depending on how far the robot is from the given apriltag
+     * and make the shooter hood angle dependent on distance to the AT
+     * @param shooter the shooter that will be shooting
+     * */
     public RevUpToShoot(ShooterSubsystem shooter){
         this.shooter = shooter;
         addRequirements(shooter);
@@ -24,6 +29,13 @@ public class RevUpToShoot extends CommandBase {
     @Override
     public void execute() {
         super.execute();
+//        if(shooter.getVolt()>13.5){
+//            shooter.setRevSpeeds(RobotConstants.Teleop.FAR_SHOT_SPEEDS_VOLT[0], RobotConstants.Teleop.CLOSE_SHOT_SPEEDS_VOLTS[0]);
+//        }else if(shooter.getVolt()>13){
+//            shooter.setRevSpeeds(RobotConstants.Teleop.FAR_SHOT_SPEEDS_VOLT[1], RobotConstants.Teleop.CLOSE_SHOT_SPEEDS_VOLTS[1]);
+//        }else{
+//            shooter.setRevSpeeds(RobotConstants.Teleop.FAR_SHOT_SPEEDS_VOLT[2], RobotConstants.Teleop.CLOSE_SHOT_SPEEDS_VOLTS[2]);
+//        }
         if(shooter.getLLResult().isValid()){
             if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
                 RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.FAR_SHOT;
@@ -32,11 +44,8 @@ public class RevUpToShoot extends CommandBase {
             }
 
             shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
-        }else{
-            shooter.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
-            RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.VERY_CLOSE_SHOT;
         }
-        shooter.rampToSpeed(RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
+        shooter.setSpeed(RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
     }
 
     @Override
