@@ -1,34 +1,39 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     public char colour = 'w';
-    Motor shootMotor;
+    public double setSpeed = 0;
+    MotorEx shootMotor;
     Servo hoodServo;
+    DcMotor motor;
     Servo feedServo;
     TelemetryManager telemetry;
     Limelight3A limelight;
     RevColorSensorV3 colourSensor;
     String[] shooter;
+    VoltageSensor voltage;
     public ShooterSubsystem(HardwareMap hardwareMap, TelemetryManager telemetryM, String[] shooter){
         colourSensor = hardwareMap.get(RevColorSensorV3.class, shooter[4]);
-        shootMotor = new Motor(hardwareMap, shooter[0]);
+        voltage = hardwareMap.get(VoltageSensor.class, "Control Hub");
+        shootMotor = new MotorEx(hardwareMap, shooter[0]);
         hoodServo = hardwareMap.get(Servo.class, shooter[1]);
         feedServo = hardwareMap.get(Servo.class, shooter[2]);
         limelight = new LLsubsystem(hardwareMap).getLimelight();
+
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
             shootMotor.setInverted(true);
@@ -36,19 +41,32 @@ public class ShooterSubsystem extends SubsystemBase {
             shootMotor.setInverted(false);
         }
         this.shooter = shooter;
+        shootMotor.setRunMode(Motor.RunMode.RawPower);
+        shootMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
     }
     public Servo getHoodServo(){
         return hoodServo;
     }
+    public double getVolt(){
+        return voltage.getVoltage();
+    }
+    public void setRevSpeeds(double far, double close){
+        RobotConstants.Teleop.CLOSE_SHOT = close;
+        RobotConstants.Teleop.FAR_SHOT = far;
+    }
     public double getSpeed(){
-        return shootMotor.getCorrectedVelocity();
+        return shootMotor.getVelocity();
+    }
+    public MotorEx getShootMotor(){
+        return shootMotor;
     }
     public void setSpeed(double speed){
         shootMotor.setRunMode(Motor.RunMode.VelocityControl);
-        shootMotor.setVeloCoefficients(RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[0],
-                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[1],
-                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[2]);
-        shootMotor.set(speed);
+        shootMotor.setVeloCoefficients(RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[0],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2]);
+        shootMotor.setVelocity(speed);
+
     }
 
     public void rampToSpeed(double speed){
@@ -89,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
         colour = getColour(rgb(colourSensor));
-        telemetry.debug(shooter[0]+"Shooter speed" ,shootMotor.getCorrectedVelocity());
+        telemetry.addData(shooter[0]+"Shooter speed" ,shootMotor.getCorrectedVelocity());
         telemetry.debug(shooter[0]+"Hood Angle", hoodServo.getPosition()/RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);
         telemetry.debug(shooter[0]+"Colour", colour);
     }

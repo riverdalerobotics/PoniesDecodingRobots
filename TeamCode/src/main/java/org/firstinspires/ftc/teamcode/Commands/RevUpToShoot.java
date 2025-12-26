@@ -36,16 +36,16 @@ public class RevUpToShoot extends CommandBase {
 //        }else{
 //            shooter.setRevSpeeds(RobotConstants.Teleop.FAR_SHOT_SPEEDS_VOLT[2], RobotConstants.Teleop.CLOSE_SHOT_SPEEDS_VOLTS[2]);
 //        }
-        if(shooter.getLLResult().isValid()){
-            if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
-                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.FAR_SHOT;
-            }else{
-                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.CLOSE_SHOT;
-            }
-
-            shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
-        }
-        shooter.setSpeed(RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO);
+//        if(shooter.getLLResult().isValid()){
+//            if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
+//                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.FAR_SHOT;
+//            }else{
+//                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.CLOSE_SHOT;
+//            }
+//
+//            shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
+//        }
+        shooter.setSpeed(shooter.setSpeed);
     }
 
     @Override

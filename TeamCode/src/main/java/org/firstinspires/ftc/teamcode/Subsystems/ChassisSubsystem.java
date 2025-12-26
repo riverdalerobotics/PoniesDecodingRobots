@@ -62,7 +62,7 @@ public class ChassisSubsystem extends SubsystemBase {
                         new RevHubOrientationOnRobot(
                                 //TODO: ENSURE THIS IS FIXED PRE COMP
                                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                                RevHubOrientationOnRobot.UsbFacingDirection.DOWN
                         )
                 )
         );
@@ -75,7 +75,7 @@ public class ChassisSubsystem extends SubsystemBase {
                 new RevHubOrientationOnRobot(
                         //TODO: ENSURE THIS IS FIXED PRE COMP
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.UsbFacingDirection.DOWN
                 )
         );
     }
@@ -84,7 +84,7 @@ public class ChassisSubsystem extends SubsystemBase {
                 new RevHubOrientationOnRobot(
                         //TODO: ENSURE THIS IS FIXED PRE COMP
                         RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.UsbFacingDirection.DOWN
                 )
         );
     }

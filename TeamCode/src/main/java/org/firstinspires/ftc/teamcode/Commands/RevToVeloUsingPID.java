@@ -2,30 +2,60 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.bylazar.telemetry.TelemetryManager;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class RevToVeloUsingPID extends CommandBase {
     double setpoint;
     ShooterSubsystem shooter;
-    PIDController shooterPID;
-    public RevToVeloUsingPID(ShooterSubsystem shooter, double velocity){
+    Telemetry telemetry;
+    PIDFController shooterPID;
+    public RevToVeloUsingPID(ShooterSubsystem shooter, double velocity, Telemetry telemetry){
         this.shooter = shooter;
+        addRequirements(shooter);
+        this.telemetry = telemetry;
         this.setpoint = velocity;
-        this.shooterPID = new PIDController(RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[0],
-                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[1],
-                RobotConstants.Tuning.SHOOTER_PID_COEFFICIENTS[2]);
-
+        this.shooterPID = new PIDFController(RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[0],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
     }
     @Override
     public void initialize() {
+        shooter.getShootMotor().motorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterPID.setTolerance(RobotConstants.Tuning.SHOOTER_TOLERANCE);
         shooterPID.setSetPoint(setpoint);
     }
 
     @Override
     public void execute() {
-        double speed = shooterPID.calculate(RobotConstants.clamp(shooter.getSpeed(),-1,1));
-        shooter.rampToSpeed(speed);
+        shooterPID.setPIDF(RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[0],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
+        double speed = RobotConstants.clamp(shooterPID.calculate(shooter.getSpeed(), setpoint),0,1);
+        telemetry.addData("set Speed", speed);
+        telemetry.addData("The THINGYMAGIC", shooterPID.calculate(shooter.getSpeed()));
+        telemetry.addData("current Speed", shooter.getSpeed());
+        shooter.setSpeed = speed;
+        telemetry.update();
+        shooter.getShootMotor().set(speed);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        shooter.rampToSpeed(0);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return shooterPID.atSetPoint();
     }
 }

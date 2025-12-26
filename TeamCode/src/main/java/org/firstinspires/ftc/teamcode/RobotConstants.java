@@ -28,7 +28,7 @@ public class RobotConstants {
         public static   String BACK_RIGHT_MOTOR = "backRight";
         public static   String INTAKE_MOTOR = "Intake Motor";
         public static   String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder", "F", COLOUR_SENSORS[0]};
-        public static   String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder", "T", COLOUR_SENSORS[1]};
+        public static   String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder", "F", COLOUR_SENSORS[1]};
         public static   String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder", "T", COLOUR_SENSORS[2]};
 
 
@@ -187,7 +187,7 @@ public class RobotConstants {
         public static double CLOSE_SHOT_THRESHOLD = 1;
         public static double CLOSE_SHOT = 1750;
         public static double VERY_CLOSE_SHOT = 500;
-        public static double FAR_SHOT = -785;
+        public static double FAR_SHOT = 1785;
         public static   double WHITE_THRESHOLD = 20;
         public static double[] FAR_SHOT_SPEEDS_VOLT = {0.911, 0.925, 0.95, 0.97};
                 //{0.83, 0.91, 0.935, 0.94};
@@ -275,10 +275,10 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static double[] SHOOTER_PID_COEFFICIENTS = {-6, 0, 0};
+        public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.03, 0, 0, 0};
         public static   double[] CHASSIS_PID_COEFFICIENTS = {0.027, 0.005, 0.001};
         public static   double CHASSIS_TOLERANCE = 1;
-        public static double SHOOTER_TOLERANCE = 0.1;
+        public static double SHOOTER_TOLERANCE = 10;
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;
