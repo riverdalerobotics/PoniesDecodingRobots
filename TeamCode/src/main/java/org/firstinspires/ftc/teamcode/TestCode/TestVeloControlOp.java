@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class TestVeloControlOp extends CommandOpMode {
     ShooterSubsystem snap;
     TelemetryManager telemetryM;
+    ShooterDefaultCommand snapDefault;
     GamepadEx gamepad;
     double setpoint;
 
@@ -42,6 +43,12 @@ public class TestVeloControlOp extends CommandOpMode {
         snap.getShootMotor().motorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         shooterPID.setTolerance(RobotConstants.Tuning.SHOOTER_TOLERANCE);
         shooterPID.setSetPoint(setpoint);
+        this.snapDefault = new ShooterDefaultCommand(snap);
+        register(snap);
+        schedule(snapDefault);
+        snap.setDefaultCommand(snapDefault);
+        this.gamepad = new GamepadEx(gamepad1);
+
     }
 
     @Override
