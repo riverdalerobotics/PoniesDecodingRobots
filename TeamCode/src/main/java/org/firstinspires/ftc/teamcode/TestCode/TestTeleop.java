@@ -64,11 +64,9 @@ public class TestTeleop extends CommandOpMode {
         
 
 
-        register(snap, crackle, pop, chassis);
-        schedule(snapDefault, crackleDefault, popDefault, chassisDefault);
+        register(snap, chassis);
+        schedule(snapDefault, chassisDefault);
         chassis.setDefaultCommand(chassisDefault);
-        pop.setDefaultCommand(popDefault);
-        crackle.setDefaultCommand(crackleDefault);
         CommandScheduler.getInstance().setDefaultCommand(snap, snapDefault);
     }
 
@@ -83,13 +81,12 @@ public class TestTeleop extends CommandOpMode {
         Button rev = new GamepadButton(
                gamepad, GamepadKeys.Button.RIGHT_BUMPER
         ).whileHeld(
+               new ParallelCommandGroup(
+                       new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT, telemetry),
+                       new RevToVeloUsingPID(crackle, RobotConstants.Teleop.FAR_SHOT, telemetry),
+                       new RevToVeloUsingPID(pop, RobotConstants.Teleop.FAR_SHOT, telemetry))
 
-
-                       new RevToVeloUsingPID(crackle, RobotConstants.Teleop.FAR_SHOT, telemetry)
-
-
-        ).whileHeld(new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT, telemetry)).
-            whileHeld(new RevToVeloUsingPID(pop, RobotConstants.Teleop.FAR_SHOT, telemetry));
+        );
                 Button shoot = new GamepadButton(
                 gamepad, GamepadKeys.Button.A
         ).whenPressed(

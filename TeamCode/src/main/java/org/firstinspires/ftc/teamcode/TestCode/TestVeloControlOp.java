@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.TestCode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.gamepad.Gamepad;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Commands.RevToVeloUsingPID;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDefaultCommand;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
@@ -53,10 +56,15 @@ public class TestVeloControlOp extends CommandOpMode {
         telemetry.addData("current Speed", snap.getSpeed());
         snap.setSpeed = speed;
         telemetry.update();
-        if(gamepad1.right_bumper){
-        snap.getShootMotor().set(speed);
-    }else{
-            snap.getShootMotor().set(0);
-        }
+//        if(gamepad1.right_bumper){
+//        snap.getShootMotor().set(speed);
+//    }else{
+//            snap.getShootMotor().set(0);
+//        }
+        Button rev = new GamepadButton(
+                gamepad, GamepadKeys.Button.RIGHT_BUMPER
+        ).whileHeld(
+                new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT, telemetry)
+        );
     }
 }
