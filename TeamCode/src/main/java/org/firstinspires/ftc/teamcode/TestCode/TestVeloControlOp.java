@@ -24,9 +24,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class TestVeloControlOp extends CommandOpMode {
     ShooterSubsystem snap;
     TelemetryManager telemetryM;
-    ShooterDefaultCommand snapDefault;
     GamepadEx gamepad;
     double setpoint;
+
+    ShooterDefaultCommand snapDefault;
 
 
     PIDFController shooterPID;
@@ -48,11 +49,11 @@ public class TestVeloControlOp extends CommandOpMode {
         schedule(snapDefault);
         snap.setDefaultCommand(snapDefault);
         this.gamepad = new GamepadEx(gamepad1);
-
     }
 
     @Override
     public void run() {
+        CommandScheduler.getInstance().run();
         shooterPID.setPIDF(RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[0],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
@@ -69,7 +70,7 @@ public class TestVeloControlOp extends CommandOpMode {
 //            snap.getShootMotor().set(0);
 //        }
         Button rev = new GamepadButton(
-                gamepad, GamepadKeys.Button.RIGHT_BUMPER
+                new GamepadEx(gamepad1), GamepadKeys.Button.RIGHT_BUMPER
         ).whileHeld(
                 new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT, telemetry)
         );

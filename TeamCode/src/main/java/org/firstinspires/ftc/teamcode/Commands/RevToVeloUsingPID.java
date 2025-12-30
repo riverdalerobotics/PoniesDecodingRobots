@@ -44,6 +44,7 @@ public class RevToVeloUsingPID extends CommandBase {
         telemetry.addData("The THINGYMAGIC", shooterPID.calculate(shooter.getSpeed()));
         telemetry.addData("current Speed", shooter.getSpeed());
         shooter.setSpeed = speed;
+        telemetry.addData("Setpoint", setpoint);
         telemetry.update();
         shooter.getShootMotor().set(speed);
     }
@@ -51,11 +52,12 @@ public class RevToVeloUsingPID extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        shooter.rampToSpeed(0);
+        shooterPID.reset();
+        //penis
     }
 
-    @Override
-    public boolean isFinished() {
-        return shooterPID.atSetPoint();
-    }
+//    @Override
+//    public boolean isFinished() {
+//        return shooterPID.atSetPoint();
+//    }
 }
