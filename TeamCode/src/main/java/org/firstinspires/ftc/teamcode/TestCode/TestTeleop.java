@@ -20,14 +20,19 @@ import org.firstinspires.ftc.teamcode.Commands.ChassisLookToAprilTag;
 import org.firstinspires.ftc.teamcode.Commands.CloseShot;
 import org.firstinspires.ftc.teamcode.Commands.FarShot;
 import org.firstinspires.ftc.teamcode.Commands.FeedShooter;
+import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.Commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.Commands.RevToVeloUsingPID;
 import org.firstinspires.ftc.teamcode.Commands.RevUpToShoot;
+import org.firstinspires.ftc.teamcode.Commands.RumbleCommand;
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
 import org.firstinspires.ftc.teamcode.Commands.ShootSequence;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDefaultCommand;
+import org.firstinspires.ftc.teamcode.Commands.ShooterIntake;
 import org.firstinspires.ftc.teamcode.Commands.Timer;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
@@ -35,8 +40,10 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class TestTeleop extends CommandOpMode {
     LLsubsystem limelight;
     ShooterSubsystem snap, crackle, pop;
+    IntakeSubsystem intake;
     ChassisSubsystem chassis;
     ChassisDefaultFEILDCommand chassisDefault;
+    IntakeDefaultCommand intakeDefaultCommand;
     ShooterDefaultCommand snapDefault, crackleDefault, popDefault;
     GamepadEx gamepad;
     CloseShot closeShot;
@@ -58,17 +65,20 @@ public class TestTeleop extends CommandOpMode {
         crackleDefault = new ShooterDefaultCommand(crackle);
         popDefault = new ShooterDefaultCommand(pop);
         snapDefault = new ShooterDefaultCommand(snap);
+        intake = new IntakeSubsystem(hardwareMap, telemetryM);
+        intakeDefaultCommand = new IntakeDefaultCommand(intake);
         revShoot = new RevUpToShoot(snap);
         closeShot = new CloseShot(snap);
         farShot = new FarShot(snap);
         
 
 
-        register(snap, crackle, pop, chassis);
-        schedule(snapDefault, crackleDefault, popDefault, chassisDefault);
+        register(snap, crackle, pop, chassis, intake);
+        schedule(snapDefault, crackleDefault, popDefault, chassisDefault, intakeDefaultCommand);
         chassis.setDefaultCommand(chassisDefault);
         pop.setDefaultCommand(popDefault);
         crackle.setDefaultCommand(crackleDefault);
+        intake.setDefaultCommand(intakeDefaultCommand);
         CommandScheduler.getInstance().setDefaultCommand(snap, snapDefault);
     }
 
@@ -89,8 +99,11 @@ public class TestTeleop extends CommandOpMode {
 
 
         ).whileHeld(new RevToVeloUsingPID(snap, RobotConstants.Teleop.FAR_SHOT, telemetry)).
-            whileHeld(new RevToVeloUsingPID(pop, RobotConstants.Teleop.FAR_SHOT, telemetry));
-                Button shoot = new GamepadButton(
+            whileHeld(new RevToVeloUsingPID(pop, RobotConstants.Teleop.FAR_SHOT, telemetry)).
+                whileHeld(new RumbleCommand(gamepad, snap, telemetry));
+
+
+        Button shoot = new GamepadButton(
                 gamepad, GamepadKeys.Button.A
         ).whenPressed(
                 new ParallelCommandGroup(
@@ -104,11 +117,25 @@ public class TestTeleop extends CommandOpMode {
                             new Timer(RobotConstants.Teleop.HOLD_THE_ARM),
                             new FeedShooter(pop))
         ));
+        Button holdArms = new GamepadButton(
+                gamepad, GamepadKeys.Button.DPAD_DOWN
+        ).whileHeld(
+                new ParallelCommandGroup(
+
+                                new FeedShooter(snap),
+                                new FeedShooter(pop)
+        ) );
 
         Button pointAtAT = new GamepadButton(
                 gamepad, GamepadKeys.Button.LEFT_BUMPER
         ).whenHeld(
                 new ChassisLookToAprilTag(chassis, limelight, telemetryM, 5, gamepad)
+
+        );
+        Button intakeButton = new GamepadButton(
+                gamepad, GamepadKeys.Button.Y
+        ).whileHeld(
+               new IntakeCommand(intake, snap, crackle, pop)
 
         );
         if(gamepad1.x){

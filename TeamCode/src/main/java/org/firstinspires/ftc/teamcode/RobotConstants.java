@@ -27,9 +27,9 @@ public class RobotConstants {
         public static   String BACK_LEFT_MOTOR = "backLeft";
         public static   String BACK_RIGHT_MOTOR = "backRight";
         public static   String INTAKE_MOTOR = "Intake Motor";
-        public static   String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder", "F", COLOUR_SENSORS[0]};
-        public static   String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder", "F", COLOUR_SENSORS[1]};
-        public static   String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder", "T", COLOUR_SENSORS[2]};
+        public static   String[] SNAP = {"Snap Motor", "Snap Hood", "Snap feeder", "F", COLOUR_SENSORS[0], "T"};
+        public static   String[] CRACKLE = {"Crackle Motor", "Crackle Hood", "Crackle feeder", "F", COLOUR_SENSORS[1], "F"};
+        public static   String[] POP = {"Pop Motor", "Pop Hood", "Pop feeder", "T", COLOUR_SENSORS[2], "F"};
 
 
 
@@ -40,7 +40,7 @@ public class RobotConstants {
 
         //Gear Ratios
         public static   double HOOD_SERVO_GEAR_RATIO = 0d;
-        public static   double SHOOTER_WHEEL_GEAR_RATIO = 1;
+        public static   double SHOOTER_WHEEL_GEAR_RATIO = 2100;
         public static double SHOOTER_WHEEL_CONVERSION = 0.43;
 
         // Motor directions (adjust based on your robot)
@@ -171,8 +171,8 @@ public class RobotConstants {
         //Setpoints
         public static   double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static   double INTAKE_Y_ANGLE_CHASSIS = 0d;
-        public static   double SHOOTER_SPEED = 1;
-        public static   double INTAKE_SPEED = 0d;
+        public static   double SHOOTER_INTAKE_SPEED = -0.2;
+        public static   double INTAKE_SPEED = -0.7;
 
         //Timers
         public static long SHOOTER_TIMER = 3000;
@@ -187,7 +187,7 @@ public class RobotConstants {
         public static double CLOSE_SHOT_THRESHOLD = 1;
         public static double CLOSE_SHOT = 1750;
         public static double VERY_CLOSE_SHOT = 500;
-        public static double FAR_SHOT = 1785;
+        public static double FAR_SHOT = 2100;
         public static   double WHITE_THRESHOLD = 20;
         public static double[] FAR_SHOT_SPEEDS_VOLT = {0.911, 0.925, 0.95, 0.97};
                 //{0.83, 0.91, 0.935, 0.94};

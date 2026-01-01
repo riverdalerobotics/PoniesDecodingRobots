@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.bylazar.telemetry.TelemetryManager;
@@ -20,19 +23,25 @@ public class ShooterSubsystem extends SubsystemBase {
     MotorEx shootMotor;
     Servo hoodServo;
     DcMotor motor;
-    Servo feedServo;
+    SimpleServo feedServo;
+
     TelemetryManager telemetry;
     Limelight3A limelight;
     RevColorSensorV3 colourSensor;
     String[] shooter;
     VoltageSensor voltage;
+    PIDFController shooterPID;
     public ShooterSubsystem(HardwareMap hardwareMap, TelemetryManager telemetryM, String[] shooter){
         colourSensor = hardwareMap.get(RevColorSensorV3.class, shooter[4]);
         voltage = hardwareMap.get(VoltageSensor.class, "Control Hub");
         shootMotor = new MotorEx(hardwareMap, shooter[0]);
         hoodServo = hardwareMap.get(Servo.class, shooter[1]);
-        feedServo = hardwareMap.get(Servo.class, shooter[2]);
+        feedServo = new SimpleServo(hardwareMap, shooter[2], 0, 1);
         limelight = new LLsubsystem(hardwareMap).getLimelight();
+        this.shooterPID = new PIDFController(RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[0],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
+                RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
 
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
@@ -40,9 +49,17 @@ public class ShooterSubsystem extends SubsystemBase {
         }else{
             shootMotor.setInverted(false);
         }
+        if(shooter[5] == "T"){
+            feedServo.setInverted(true);
+        }else{
+            feedServo.setInverted(false);
+        }
         this.shooter = shooter;
         shootMotor.setRunMode(Motor.RunMode.RawPower);
         shootMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+    }
+    public PIDFController getShooterPID(){
+        return shooterPID;
     }
     public Servo getHoodServo(){
         return hoodServo;
@@ -81,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public void resetFeed()
     {
-        feedServo.setPosition(0.2);
+        feedServo.setPosition(0.15);
     }
     public double getHoodAngle(){
         return hoodServo.getPosition();
