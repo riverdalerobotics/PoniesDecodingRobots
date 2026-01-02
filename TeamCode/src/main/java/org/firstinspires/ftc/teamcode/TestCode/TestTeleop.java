@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.Commands.FarShot;
 import org.firstinspires.ftc.teamcode.Commands.FeedShooter;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeDefaultCommand;
+import org.firstinspires.ftc.teamcode.Commands.IntakeFeeding;
 import org.firstinspires.ftc.teamcode.Commands.RevToVeloUsingPID;
 import org.firstinspires.ftc.teamcode.Commands.RevUpToShoot;
 import org.firstinspires.ftc.teamcode.Commands.RumbleCommand;
@@ -122,8 +123,8 @@ public class TestTeleop extends CommandOpMode {
         ).whileHeld(
                 new ParallelCommandGroup(
 
-                                new FeedShooter(snap),
-                                new FeedShooter(pop)
+                                new IntakeFeeding(snap),
+                                new IntakeFeeding(pop)
         ) );
 
         Button pointAtAT = new GamepadButton(

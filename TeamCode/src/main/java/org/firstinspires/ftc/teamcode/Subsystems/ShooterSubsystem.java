@@ -94,11 +94,14 @@ public class ShooterSubsystem extends SubsystemBase {
         telemetry.addLine("JKLJLKGJLKGJ");
     }
     public void feedShoot(){
-        feedServo.setPosition(0);
+        feedServo.setPosition(RobotConstants.Teleop.FEED);
     }
     public void resetFeed()
     {
-        feedServo.setPosition(0.15);
+        feedServo.setPosition(RobotConstants.Teleop.STOW_FEEDER);
+    }
+    public void intakeFeeder(){
+        feedServo.setPosition(RobotConstants.Teleop.INTAKE_FEEDER);
     }
     public double getHoodAngle(){
         return hoodServo.getPosition();

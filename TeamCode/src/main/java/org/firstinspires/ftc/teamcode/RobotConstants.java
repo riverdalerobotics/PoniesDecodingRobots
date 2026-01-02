@@ -173,6 +173,9 @@ public class RobotConstants {
         public static   double INTAKE_Y_ANGLE_CHASSIS = 0d;
         public static   double SHOOTER_INTAKE_SPEED = -0.2;
         public static   double INTAKE_SPEED = -0.7;
+        public static double FEED = 0.2;
+        public static double STOW_FEEDER = 0;
+        public static double INTAKE_FEEDER = 0.1;
 
         //Timers
         public static long SHOOTER_TIMER = 3000;
