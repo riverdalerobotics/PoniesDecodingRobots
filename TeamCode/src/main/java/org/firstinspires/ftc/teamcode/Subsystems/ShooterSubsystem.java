@@ -50,9 +50,9 @@ public class ShooterSubsystem extends SubsystemBase {
             shootMotor.setInverted(false);
         }
         if(shooter[5] == "T"){
-            feedServo.setInverted(true);
-        }else{
             feedServo.setInverted(false);
+        }else{
+            feedServo.setInverted(true);
         }
         this.shooter = shooter;
         shootMotor.setRunMode(Motor.RunMode.RawPower);

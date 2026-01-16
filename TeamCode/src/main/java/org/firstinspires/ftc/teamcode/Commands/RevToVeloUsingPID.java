@@ -16,11 +16,10 @@ public class RevToVeloUsingPID extends CommandBase {
     ShooterSubsystem shooter;
     Telemetry telemetry;
     PIDFController shooterPID;
-    public RevToVeloUsingPID(ShooterSubsystem shooter, double velocity, Telemetry telemetry){
+    public RevToVeloUsingPID(ShooterSubsystem shooter, Telemetry telemetry){
         this.shooter = shooter;
         addRequirements(shooter);
         this.telemetry = telemetry;
-        this.setpoint = velocity;
         this.shooterPID = shooter.getShooterPID();
     }
     @Override
@@ -34,9 +33,9 @@ public class RevToVeloUsingPID extends CommandBase {
     public void execute() {
         if(shooter.getLLResult().isValid()){
             if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
-                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.FAR_SHOT;
+                setpoint = RobotConstants.Teleop.FAR_SHOT;
             }else{
-                RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO = RobotConstants.Teleop.CLOSE_SHOT;
+                setpoint = RobotConstants.Teleop.CLOSE_SHOT;
             }
 
             shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
@@ -45,8 +44,9 @@ public class RevToVeloUsingPID extends CommandBase {
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
-        double speed = RobotConstants.clamp(shooterPID.calculate(shooter.getSpeed(), RobotConstants.Hardware.SHOOTER_WHEEL_GEAR_RATIO),0,1);
+        double speed = RobotConstants.clamp(shooterPID.calculate(shooter.getSpeed(), setpoint),0,1);
         telemetry.addData("set Speed", speed);
+        telemetry.addData("Ta", shooter.getLLResult().getTa());
         telemetry.addData("The THINGYMAGIC", shooterPID.calculate(shooter.getSpeed()));
         telemetry.addData("current Speed", shooter.getSpeed());
         shooter.setSpeed = speed;

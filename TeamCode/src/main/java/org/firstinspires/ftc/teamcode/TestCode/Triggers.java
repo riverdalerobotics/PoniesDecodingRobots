@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.TestCode;
 
-public class Triggers {
-    boolean condition;
-    public Triggers(boolean condition){
-        this.condition = condition;
-    }
+import com.arcrobotics.ftclib.command.button.Trigger;
 
-    public boolean isCondition() {
-        return condition;
+public class Triggers extends Trigger {
+    @Override
+    public boolean get() {
+        return super.get();
     }
 }

@@ -62,39 +62,34 @@ public class ChassisSubsystem extends SubsystemBase {
                         new RevHubOrientationOnRobot(
                                 //TODO: ENSURE THIS IS FIXED PRE COMP
                                 RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                                RevHubOrientationOnRobot.UsbFacingDirection.DOWN
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP
                         )
                 )
         );
-//        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-//        limelight.start();
-//        LLresults = limelight.getLatestResult();
     }
     public void initBlue(){
-        new IMU.Parameters(
+        imu.initialize(new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        //TODO: ENSURE THIS IS FIXED PRE COMP
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.DOWN
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
-        );
+        ));
     }
     public void initRed(){
-        new IMU.Parameters(
+        imu.initialize(new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        //TODO: ENSURE THIS IS FIXED PRE COMP
                         RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.DOWN
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
-        );
+        ));
     }
 
     public void resetPos(){
         imu.resetYaw();
     }
 
-    public Pose getPose() {
-        return new Pose(otos.getPosition().x, otos.getPosition().y, otos.getPosition().h*6);
+    public YawPitchRollAngles yawPitchRollAngles(){
+        return imu.getRobotYawPitchRollAngles();
     }
 
     public Pose3D getPoseLL() {
@@ -108,18 +103,16 @@ public class ChassisSubsystem extends SubsystemBase {
     public LLResult getLLresults() {
         return LLresults;
     }
-
+    public Pose getPose() {
+        return new Pose(otos.getPosition().x, otos.getPosition().y, yawPitchRollAngles().getYaw());
+    }
     public Pose getPoseLLAsPose2D() {
         return new Pose(-(getPoseLL().getPosition().y + 72) / 39.3701,
                 -(getPoseLL().getPosition().x + 72) / 39.3701,
                 getPose().getHeading());
     }
-    public YawPitchRollAngles yawPitchRollAngles(){
-        return imu.getRobotYawPitchRollAngles();
-    }
-    //    public void selectPipeline(int pipeline){
-//        limelight.pipelineSwitch(pipeline);
-//    }
+
+
     public void driveRobotOriented(double strafeSpeed, double forwardSpeed, double turn) {
         fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         fr = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
@@ -130,6 +123,7 @@ public class ChassisSubsystem extends SubsystemBase {
 
     }
     public void driveFieldOriented(double strafeSpeed, double forwardSpeed, double turn) {
+        //Robot Oriented
         fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         fr = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
@@ -140,6 +134,7 @@ public class ChassisSubsystem extends SubsystemBase {
         drive.driveFieldCentric(strafeSpeed, -forwardSpeed, turn, imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES), false);
     }
     public void fieldOriented(double strafeSpeed, double forwardSpeed, double turn) {
+        //field oriented
         double yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // calculated from IMU
         fl = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
@@ -152,7 +147,7 @@ public class ChassisSubsystem extends SubsystemBase {
         double rotX = (strafeSpeed * Math.cos(yaw)) + (forwardSpeed * Math.sin(yaw));
         double rotY = (strafeSpeed * Math.sin(yaw)) - (forwardSpeed * Math.cos(yaw));
         drive.driveRobotCentric(rotX, rotY, turn, false);
-        //field oriented
+
     }
 
     public void stop() {
@@ -176,18 +171,14 @@ public class ChassisSubsystem extends SubsystemBase {
         return follower;
     }
 
-    //    public LLResult getLLResult(){
-//        return limelight.getLatestResult();
-//    }
+
     @Override
     public void periodic() {
-//        limelight.updateRobotOrientation(getPose().getHeading());
         super.periodic();
         currentPos = getPose();
         follower.update();
         telemetry.debug("Position otos: ", otos.getPosition());
         telemetry.debug("Position: ", getPose());
-//        telemetry.debug("Position Using LL: ", getPoseLL());
         follower.setPose(currentPos);
     }
 

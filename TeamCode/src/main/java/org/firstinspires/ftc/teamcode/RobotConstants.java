@@ -171,7 +171,7 @@ public class RobotConstants {
         //Setpoints
         public static   double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static   double INTAKE_Y_ANGLE_CHASSIS = 0d;
-        public static   double SHOOTER_INTAKE_SPEED = -0.2;
+        public static   double SHOOTER_INTAKE_SPEED = -0.3;
         public static   double INTAKE_SPEED = -0.7;
         public static double FEED = 0.2;
         public static double STOW_FEEDER = 0;
@@ -188,9 +188,9 @@ public class RobotConstants {
         public static   double[] WHITE_RGB = {0, 0, 0};
         public static   double INTAKE_MIN = 100;
         public static double CLOSE_SHOT_THRESHOLD = 1;
-        public static double CLOSE_SHOT = 1750;
+        public static double CLOSE_SHOT = 1550;
         public static double VERY_CLOSE_SHOT = 500;
-        public static double FAR_SHOT = 2100;
+        public static double FAR_SHOT = 1900;
         public static   double WHITE_THRESHOLD = 20;
         public static double[] FAR_SHOT_SPEEDS_VOLT = {0.911, 0.925, 0.95, 0.97};
                 //{0.83, 0.91, 0.935, 0.94};
@@ -278,10 +278,10 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.03, 0, 0, 0};
-        public static   double[] CHASSIS_PID_COEFFICIENTS = {0.027, 0.005, 0.001};
+        public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.0007, 0, 0, 0.00045};
+        public static   double[] CHASSIS_PID_COEFFICIENTS = {-0.014, -0.005, -0.001};
         public static   double CHASSIS_TOLERANCE = 1;
-        public static double SHOOTER_TOLERANCE = 10;
+        public static double SHOOTER_TOLERANCE = 70;
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;

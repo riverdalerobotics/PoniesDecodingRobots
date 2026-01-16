@@ -29,9 +29,9 @@ public class IntakeCommand extends CommandBase {
     public void execute() {
         super.execute();
         intake.spinIntake(RobotConstants.Teleop.INTAKE_SPEED);
-        snap.rampToSpeed(RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
-        crackle.rampToSpeed(RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
-        pop.rampToSpeed(RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
+        crackle.getShootMotor().set(RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
+//        crackle.getShootMotor().set(-RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
+//        pop.getShootMotor().set(-RobotConstants.Teleop.SHOOTER_INTAKE_SPEED);
 
     }
 
