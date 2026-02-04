@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.Commands.Motifs.ShootGPP;
-import org.firstinspires.ftc.teamcode.Commands.Motifs.ShootPGP;
-import org.firstinspires.ftc.teamcode.Commands.Motifs.ShootPPG;
+
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 import java.util.ArrayList;
@@ -33,13 +31,6 @@ public class ShootMotif extends SequentialCommandGroup {
             });
         }
 
-        if(motif == gpp){
-                addCommands(new ShootGPP(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
-        } else if (motif == ppg) {
-            addCommands(new ShootPPG(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
-        }else{
-            addCommands(new ShootPGP(orderedShooters.get(0), orderedShooters.get(1), orderedShooters.get(2)));
-        }
         addRequirements(snap, crackle, pop);
 
     }

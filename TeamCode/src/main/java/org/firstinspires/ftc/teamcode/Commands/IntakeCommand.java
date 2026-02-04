@@ -20,6 +20,9 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void initialize() {
         super.initialize();
+        snap.getShootMotor().set(0);
+        crackle.getShootMotor().set(0);
+        pop.getShootMotor().set(0);
         snap.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
         crackle.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
         pop.setHoodAngle(RobotConstants.Tuning.MAX_ANGLE);
@@ -35,4 +38,10 @@ public class IntakeCommand extends CommandBase {
 
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        intake.spinIntake(0);
+        crackle.getShootMotor().set(0);
+    }
 }

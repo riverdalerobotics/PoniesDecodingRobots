@@ -2,16 +2,24 @@ package org.firstinspires.ftc.teamcode.TestCode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Commands.ChassisAutoMoveUsingTime;
 import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultROBOTCommand;
+import org.firstinspires.ftc.teamcode.Commands.ChassisLLAutoDrive;
+import org.firstinspires.ftc.teamcode.Commands.ChassisLLAutoTurn;
 import org.firstinspires.ftc.teamcode.Commands.ChassisLookToAprilTag;
+import org.firstinspires.ftc.teamcode.Commands.LimelightSeesAT;
+import org.firstinspires.ftc.teamcode.Commands.ShootSequence;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.LLsubsystem;
 
@@ -46,16 +54,24 @@ public class TestPointAtAT extends CommandOpMode {
     public void run() {
         CommandScheduler.getInstance().run();
         super.run();
-//       Button shoot = new GamepadButton(
-//               driver, GamepadKeys.Button.A
-//       ).whenHeld(
-//               new RevUpToShoot(shooterSubsystem)
-//       );
+        if(gamepad1.start){
+
+        }
         Button pointAtAT = new GamepadButton(
                 driver, GamepadKeys.Button.A
-        ).whenPressed(
-                new ChassisLookToAprilTag(chassis, limelight, telemetryM, 0, driver)
+        ).whileHeld(
+                new SequentialCommandGroup(
+                        new ParallelDeadlineGroup(
+                                new LimelightSeesAT(limelight),
+                                new ChassisAutoMoveUsingTime(chassis, telemetryM, 0.5, 0, 0)
+                        ),
+                        new ChassisLLAutoDrive(chassis, limelight, telemetry, new Pose(0, 0, 45)),
+                        new ChassisLLAutoTurn(chassis, limelight, telemetry, 90)
+                )
+
         );
+        telemetry.addData("position", limelight.getLLResults().getBotpose().getPosition());
+        telemetry.update();
         telemetryM.update();
     }
 }

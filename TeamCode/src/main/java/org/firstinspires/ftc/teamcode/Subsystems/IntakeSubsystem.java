@@ -43,8 +43,5 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        telemetry.debug("Left colour", getColour(rgb(leftColourSensor)));
-        telemetry.debug("Mid RGB", getColour(rgb(midColourSensor)));
-        telemetry.debug("Right RGB", getColour(rgb(rightColourSensor)));
     }
 }

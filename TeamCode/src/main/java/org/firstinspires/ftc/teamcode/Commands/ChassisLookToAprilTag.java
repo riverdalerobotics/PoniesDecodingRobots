@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
@@ -26,14 +25,14 @@ public class ChassisLookToAprilTag extends CommandBase {
         this.telemetryManager = telemetryManager;
         limer = limelight;
         this.targetAngle = targetAngle;
-        this.hPID = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[2]);
+        this.hPID = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
         addRequirements(cSubsystem);
     }
 
     @Override
     public void initialize(){
         super.initialize();
-        hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
+        hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE[1]);
         hPID.setSetPoint(RobotConstants.Tuning.POINT_AT_AT_TARGET);
     }
 

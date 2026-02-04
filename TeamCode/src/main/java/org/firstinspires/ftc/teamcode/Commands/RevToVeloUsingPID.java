@@ -16,21 +16,30 @@ public class RevToVeloUsingPID extends CommandBase {
     ShooterSubsystem shooter;
     Telemetry telemetry;
     PIDFController shooterPID;
+    boolean stop = false;
     public RevToVeloUsingPID(ShooterSubsystem shooter, Telemetry telemetry){
         this.shooter = shooter;
         addRequirements(shooter);
         this.telemetry = telemetry;
         this.shooterPID = shooter.getShooterPID();
     }
+    public RevToVeloUsingPID(ShooterSubsystem shooter, Telemetry telemetry, boolean stop){
+        this.shooter = shooter;
+        addRequirements(shooter);
+        this.telemetry = telemetry;
+        this.shooterPID = shooter.getShooterPID();
+        this.stop = stop;
+    }
     @Override
     public void initialize() {
+        setpoint = RobotConstants.Teleop.CLOSE_SHOT;
         shooter.getShootMotor().motorEx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        shooterPID.setTolerance(RobotConstants.Tuning.SHOOTER_TOLERANCE);
         shooterPID.setSetPoint(setpoint);
     }
 
     @Override
     public void execute() {
+        shooterPID.setSetPoint(setpoint);
         if(shooter.getLLResult().isValid()){
             if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
                 setpoint = RobotConstants.Teleop.FAR_SHOT;
@@ -45,12 +54,7 @@ public class RevToVeloUsingPID extends CommandBase {
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
         double speed = RobotConstants.clamp(shooterPID.calculate(shooter.getSpeed(), setpoint),0,1);
-        telemetry.addData("set Speed", speed);
-        telemetry.addData("Ta", shooter.getLLResult().getTa());
-        telemetry.addData("The THINGYMAGIC", shooterPID.calculate(shooter.getSpeed()));
-        telemetry.addData("current Speed", shooter.getSpeed());
-        shooter.setSpeed = speed;
-        telemetry.addData("Setpoint", setpoint);
+        shooter.getTelemetry().addData("Calc Speed", speed);
         telemetry.update();
         shooter.getShootMotor().set(speed);
     }
@@ -59,7 +63,9 @@ public class RevToVeloUsingPID extends CommandBase {
     public void end(boolean interrupted) {
         super.end(interrupted);
         shooterPID.reset();
-        //penis
+        if(stop){
+            shooter.getShootMotor().set(0);
+        }
     }
 
 //    @Override

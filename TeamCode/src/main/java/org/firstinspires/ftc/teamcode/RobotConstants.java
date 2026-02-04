@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -172,15 +173,15 @@ public class RobotConstants {
         public static   double INTAKE_X_ANGLE_CHASSIS = 0d;
         public static   double INTAKE_Y_ANGLE_CHASSIS = 0d;
         public static   double SHOOTER_INTAKE_SPEED = -0.3;
-        public static   double INTAKE_SPEED = -0.7;
+        public static   double INTAKE_SPEED = -1;
         public static double FEED = 0.2;
         public static double STOW_FEEDER = 0;
         public static double INTAKE_FEEDER = 0.1;
 
         //Timers
-        public static long SHOOTER_TIMER = 3000;
+        public static long SHOOTER_TIMER = 1000;
         public static long HOLD_THE_ARM = 500;
-        public static long DRIVE_FORWARD_AUTO = 500;
+        public static long DRIVE_FORWARD_AUTO = 1000;
         public static long DRIVE_FORWARD_CLOSE_AUTO = 500;
 
 
@@ -188,9 +189,9 @@ public class RobotConstants {
         public static   double[] WHITE_RGB = {0, 0, 0};
         public static   double INTAKE_MIN = 100;
         public static double CLOSE_SHOT_THRESHOLD = 1;
-        public static double CLOSE_SHOT = 1550;
+        public static double CLOSE_SHOT = 1585;
         public static double VERY_CLOSE_SHOT = 500;
-        public static double FAR_SHOT = 1900;
+        public static double FAR_SHOT = 1930;
         public static   double WHITE_THRESHOLD = 20;
         public static double[] FAR_SHOT_SPEEDS_VOLT = {0.911, 0.925, 0.95, 0.97};
                 //{0.83, 0.91, 0.935, 0.94};
@@ -259,7 +260,13 @@ public class RobotConstants {
             public static   double PARK_Y = 12.0;
         }
     }
-
+    @Configurable
+    public static class Testing{
+        public static long time = 2000;
+        public static Pose CHASSIS_DRIVE_TO_SECOND_INTAKE = new Pose(-3.4,2., -20);
+        public static Pose CHASSIS_DRIVE_TO_FIRST_INTAKE = new Pose(-2.7,2.3, -30);
+        public static Pose CHASSIS_DRIVE_TO_SECOND_SHOT = new Pose(-2.4, 2.4, -40);
+    }
     // === TUNING AND CALIBRATION ===
     @Configurable
     public static   class Tuning {
@@ -278,15 +285,17 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
-        public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.0007, 0, 0, 0.00045};
-        public static   double[] CHASSIS_PID_COEFFICIENTS = {-0.014, -0.005, -0.001};
-        public static   double CHASSIS_TOLERANCE = 1;
-        public static double SHOOTER_TOLERANCE = 70;
+        public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.0023, 0.0075, 0.0005, 0.000435};
+        public static   double[] CHASSIS_PID_COEFFICIENTS_POINT = {-0.025, -0.02, -0.001};
+        public static   double[] CHASSIS_TURN_PID_COEFFICIENTS = {0.03, 0.034, 0.00004};
+        public static   double[] CHASSIS_DRIVE_PID_COEFFICIENTS = {0.75, 0.2, 0.05};
+        public static   double [] CHASSIS_TOLERANCE = {0.09, 1};
+        public static double[] SHOOTER_TOLERANCE = {30,10};
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;
         public static double POINT_AT_AT_TARGET_AUTO = 0;
-        public static   double TA_TO_ANGLE = 0.06;
+        public static   double TA_TO_ANGLE = 0.04;
         public static double MAX_ANGLE = 0.15;
         public static double MIN_ANGLE = 0;
     }

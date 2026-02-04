@@ -42,6 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[1],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[2],
                 RobotConstants.Tuning.SHOOTER_PIDF_COEFFICIENTS[3]);
+        this.shooterPID.setTolerance(RobotConstants.Tuning.SHOOTER_TOLERANCE[0]);
 
         this.telemetry = telemetryM;
         if(shooter[3] == "T"){
@@ -60,6 +61,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public PIDFController getShooterPID(){
         return shooterPID;
+    }
+    public TelemetryManager getTelemetry(){
+        return telemetry;
     }
     public Servo getHoodServo(){
         return hoodServo;
@@ -128,7 +132,5 @@ public class ShooterSubsystem extends SubsystemBase {
         super.periodic();
         colour = getColour(rgb(colourSensor));
         telemetry.addData(shooter[0]+"Shooter speed" ,shootMotor.getCorrectedVelocity());
-        telemetry.debug(shooter[0]+"Hood Angle", hoodServo.getPosition()/RobotConstants.Hardware.HOOD_SERVO_GEAR_RATIO);
-        telemetry.debug(shooter[0]+"Colour", colour);
     }
 }

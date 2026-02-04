@@ -23,14 +23,14 @@ public class ChassisLookToAprilTagInAutoClose extends CommandBase {
         this.telemetryManager = telemetryManager;
         limer = limelight;
         this.targetAngle = targetAngle;
-        this.hPID = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[2]);
+        this.hPID = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
         addRequirements(cSubsystem);
     }
 
     @Override
     public void initialize(){
         super.initialize();
-        hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
+        hPID.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE[1]);
         hPID.setSetPoint(RobotConstants.Tuning.POINT_AT_AT_TARGET_AUTO);
     }
 

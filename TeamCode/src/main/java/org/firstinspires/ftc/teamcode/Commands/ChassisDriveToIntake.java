@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
@@ -19,12 +18,12 @@ public class ChassisDriveToIntake extends CommandBase {
     @Override
     public void initialize() {
         super.initialize();
-        xPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[2]);
-        yPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS[2]);
+        xPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
+        yPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
         xPid.setSetPoint(RobotConstants.Teleop.INTAKE_X_ANGLE_CHASSIS);
         yPid.setSetPoint(RobotConstants.Teleop.INTAKE_Y_ANGLE_CHASSIS);
-        xPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
-        yPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE);
+        xPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE[1]);
+        yPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE[1]);
 
 //        chassis.selectPipeline(RobotConstants.Hardware.INTAKE_PIPELINE);
     }

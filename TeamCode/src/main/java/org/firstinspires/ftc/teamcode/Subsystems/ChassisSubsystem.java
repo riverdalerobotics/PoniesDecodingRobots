@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -26,10 +22,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-import java.util.List;
-
 public class ChassisSubsystem extends SubsystemBase {
     TelemetryManager telemetry;
+    PIDController chassisPID;
     //Limelight3A limelight;
     MotorEx fl, fr, bl, br;
     Follower follower;
@@ -48,9 +43,15 @@ public class ChassisSubsystem extends SubsystemBase {
         br = new MotorEx(hardwareMap, RobotConstants.Hardware.FRONT_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         fr = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_RIGHT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
         bl = new MotorEx(hardwareMap, RobotConstants.Hardware.BACK_LEFT_MOTOR, RobotConstants.Hardware.DRIVE_MOTOR_TYPE);
+        fl.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         otos = hardwareMap.get(SparkFunOTOS.class, RobotConstants.Hardware.OTOS_SENSOR);
         fl.setInverted(true);
         bl.setInverted(true);
+        chassisPID = new PIDController(RobotConstants.Tuning.CHASSIS_TURN_PID_COEFFICIENTS[0],
+                RobotConstants.Tuning.CHASSIS_TURN_PID_COEFFICIENTS[1], RobotConstants.Tuning.CHASSIS_TURN_PID_COEFFICIENTS[2]);
         this.drive = new MecanumDrive(fl, fr, bl, br);
         this.telemetry = telemetry;
         this.follower = Constants.createFollower(hardwareMap);
@@ -74,6 +75,7 @@ public class ChassisSubsystem extends SubsystemBase {
                         RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         ));
+
     }
     public void initRed(){
         imu.initialize(new IMU.Parameters(
@@ -99,7 +101,9 @@ public class ChassisSubsystem extends SubsystemBase {
             return null;
         }
     }
-
+    public PIDController getChassisPID(){
+        return chassisPID;
+    }
     public LLResult getLLresults() {
         return LLresults;
     }
@@ -177,8 +181,6 @@ public class ChassisSubsystem extends SubsystemBase {
         super.periodic();
         currentPos = getPose();
         follower.update();
-        telemetry.debug("Position otos: ", otos.getPosition());
-        telemetry.debug("Position: ", getPose());
         follower.setPose(currentPos);
     }
 

@@ -9,9 +9,6 @@ public class Shoot extends SequentialCommandGroup {
         addRequirements(snap, crackle, pop);
         if(shootMotif){
             addCommands(new ShootMotif(snap, crackle, pop, motif));
-        }else{
-            addCommands(new ShootAllThree(snap, crackle, pop));
         }
-
     }
 }
