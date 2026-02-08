@@ -14,14 +14,14 @@ public class ShootAllThree extends SequentialCommandGroup {
     public ShootAllThree(ShooterSubsystem snap, ShooterSubsystem crackle, ShooterSubsystem pop, Telemetry telemetry){
        addCommands(new ParallelDeadlineGroup(
                        new WaitUntilCommand(()->snap.getShooterPID().atSetPoint()&&pop.getShooterPID().atSetPoint()&&crackle.getShooterPID().atSetPoint()),
-                       new RevToVeloUsingPID(snap, telemetry),
-                       new RevToVeloUsingPID(crackle, telemetry),
-                       new RevToVeloUsingPID(pop, telemetry)
+                       new RevToVeloUsingPIDAUTO(snap, telemetry),
+                       new RevToVeloUsingPIDAUTO(crackle, telemetry),
+                       new RevToVeloUsingPIDAUTO(pop, telemetry)
                ),
                new ParallelRaceGroup(
-                       new RevToVeloUsingPID(snap, telemetry, true),
-                       new RevToVeloUsingPID(crackle, telemetry, true),
-                       new RevToVeloUsingPID(pop, telemetry, true),
+                       new RevToVeloUsingPIDAUTO(snap, telemetry, true),
+                       new RevToVeloUsingPIDAUTO(crackle, telemetry, true),
+                       new RevToVeloUsingPIDAUTO(pop, telemetry, true),
                        new ParallelDeadlineGroup(
                                new Timer(RobotConstants.Teleop.HOLD_THE_ARM),
                                new FeedShooter(snap)),

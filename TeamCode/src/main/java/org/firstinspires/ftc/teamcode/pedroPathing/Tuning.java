@@ -514,7 +514,7 @@ class LateralVelocityTuner extends OpMode {
  * This is the ForwardZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot
  * forward until a specified velocity is achieved. Then, the robot cuts power to the motors, setting
  * them to zero power. The deceleration, or negative acceleration, is then measured until the robot
- * stops. The accelerations across the entire time the robot is slowing down is then averaged and
+ * stops. The accelerations across the entire AUTO_TIME the robot is slowing down is then averaged and
  * that number is then printed. This is used to determine how the robot will decelerate in the
  * forward direction when power is cut, making the estimations used in the calculations for the
  * drive Vector more accurate and giving better braking at the end of Paths.
@@ -618,7 +618,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
  * This is the LateralZeroPowerAccelerationTuner autonomous follower OpMode. This runs the robot
  * to the right until a specified velocity is achieved. Then, the robot cuts power to the motors, setting
  * them to zero power. The deceleration, or negative acceleration, is then measured until the robot
- * stops. The accelerations across the entire time the robot is slowing down is then averaged and
+ * stops. The accelerations across the entire AUTO_TIME the robot is slowing down is then averaged and
  * that number is then printed. This is used to determine how the robot will decelerate in the
  * forward direction when power is cut, making the estimations used in the calculations for the
  * drive Vector more accurate and giving better braking at the end of Paths.

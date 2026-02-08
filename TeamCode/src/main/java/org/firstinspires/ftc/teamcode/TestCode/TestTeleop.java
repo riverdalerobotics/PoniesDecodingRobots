@@ -201,8 +201,7 @@ public class TestTeleop extends CommandOpMode {
         spit.whileHeld(
                 new SpitCommand(intake)
         );
-        intakeTrigger.whileActiveContinuous(new IntakeCommand(intake, snap, crackle, pop))
-                .whileActiveContinuous(new ChassisDefaultFEILDCommandSlowMode(chassis, gamepad));
+        intakeTrigger.whileActiveContinuous(new IntakeCommand(intake, snap, crackle, pop));
         holdArms.whileActiveContinuous(new ParallelCommandGroup(
                 new IntakeFeeding(snap),
                 new IntakeFeeding(pop)

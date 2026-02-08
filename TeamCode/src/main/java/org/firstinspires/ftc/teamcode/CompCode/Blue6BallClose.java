@@ -1,24 +1,20 @@
-package org.firstinspires.ftc.teamcode.TestCode;
+package org.firstinspires.ftc.teamcode.CompCode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Commands.ChassisAutoMoveUsingTime;
 import org.firstinspires.ftc.teamcode.Commands.ChassisDefaultFEILDCommand;
-import org.firstinspires.ftc.teamcode.Commands.ChassisLLAutoDrive;
+import org.firstinspires.ftc.teamcode.Commands.ChassisLLAutoDriveBLUE;
 import org.firstinspires.ftc.teamcode.Commands.ChassisLLAutoTurn;
-import org.firstinspires.ftc.teamcode.Commands.ChassisLookToAprilTagInAutoRed;
+import org.firstinspires.ftc.teamcode.Commands.ChassisLookToAprilTagInAutoBlue;
 import org.firstinspires.ftc.teamcode.Commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeDefaultCommand;
 import org.firstinspires.ftc.teamcode.Commands.IntakeFeeding;
@@ -36,8 +32,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 import java.util.List;
 
-@TeleOp(group = "Test", name = "Test Auto")
-public class TestLLAuto extends CommandOpMode {
+@Autonomous(group = "BLUE Auto", name = "BLUE 6 Ball far")
+public class Blue6BallClose extends CommandOpMode {
     LLsubsystem limelight;
     ShooterSubsystem snap, crackle, pop;
     IntakeSubsystem intake;
@@ -47,6 +43,7 @@ public class TestLLAuto extends CommandOpMode {
     ShooterDefaultCommand snapDefault, crackleDefault, popDefault;
     GamepadEx gamepad;
     TelemetryManager telemetryM;
+    boolean run = true;
 
 
 
@@ -86,7 +83,7 @@ public class TestLLAuto extends CommandOpMode {
         crackle.setDefaultCommand(crackleDefault);
         snap.setDefaultCommand(snapDefault);
         intake.setDefaultCommand(intakeDefaultCommand);
-
+        chassis.resetPos();
         limelight.getLimelight().start();
 
     }
@@ -94,15 +91,38 @@ public class TestLLAuto extends CommandOpMode {
     @Override
     public void run(){
         CommandScheduler.getInstance().run();
-        limelight.getLimelight().updateRobotOrientation(chassis.yawPitchRollAngles().getYaw());
-        if(gamepad1.start){
-            chassis.resetPos();
-        }
 
+        if (run){schedule(new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                        new LimelightSeesAT(limelight),
+                        new ChassisAutoMoveUsingTime(chassis, telemetryM, 0, 0 , 0.3)
+                ),
+                new ChassisLookToAprilTagInAutoBlue(chassis, limelight, telemetryM, 0),
+                new ShootAllThree(snap, crackle, pop, telemetry),
+                new ChassisLLAutoDriveBLUE(chassis, limelight, telemetry, RobotConstants.BlueAuto.BLUE_FAR_INTAKE),
+                new ChassisLLAutoTurn(chassis, limelight, telemetry, 90),
+                new ParallelDeadlineGroup(
+                        new Timer(RobotConstants.Teleop.DRIVE_FORWARD_AUTO),
+                        new IntakeCommand(intake, snap, crackle, pop),
+                        new IntakeFeeding(snap),
+                        new IntakeFeeding(pop),
+                        new ChassisAutoMoveUsingTime(chassis, telemetryM, 0, -0.75, 0)
+                ),
+                new ChassisLLAutoTurn(chassis, limelight, telemetry, 0),
+                new ParallelDeadlineGroup(
+                        new LimelightSeesAT(limelight),
+                        new ChassisAutoMoveUsingTime(chassis, telemetryM, 0.5, 0, 0),
+                        new IntakeCommand(intake, snap, crackle, pop)
+                ),
+                new ChassisLLAutoDriveBLUE(chassis, limelight, telemetry, RobotConstants.BlueAuto.BLUE_FAR_SHOT),
+                new ChassisLookToAprilTagInAutoBlue(chassis, limelight, telemetryM, 0),
+                new ShootAllThree(snap, crackle, pop, telemetry)
+                ));
+            run = false;
+        }
         telemetry.addData("position", limelight.getLLResults().getBotpose_MT2());
         telemetry.addData("yaw", chassis.yawPitchRollAngles().getYaw());
         telemetryM.addData("yaw", chassis.yawPitchRollAngles().getYaw());
-        telemetryM.addData("OTOS_POSE", chassis.getPose());
 
         telemetry.addData("Chassis Command", chassis.getCurrentCommand());
         telemetry.addData("ta", snap.getLLResult().getTa());
@@ -110,4 +130,3 @@ public class TestLLAuto extends CommandOpMode {
         telemetryM.update();
     }
 }
-

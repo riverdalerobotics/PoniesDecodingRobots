@@ -31,4 +31,8 @@ public class SpitCommand extends CommandBase {
 
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        intake.spinIntake(0);
+    }
 }

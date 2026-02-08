@@ -18,8 +18,8 @@ public class ChassisDriveToIntake extends CommandBase {
     @Override
     public void initialize() {
         super.initialize();
-        xPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
-        yPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT[2]);
+        xPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[2]);
+        yPid = new PIDController(RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[0], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[1], RobotConstants.Tuning.CHASSIS_PID_COEFFICIENTS_POINT_AUTO[2]);
         xPid.setSetPoint(RobotConstants.Teleop.INTAKE_X_ANGLE_CHASSIS);
         yPid.setSetPoint(RobotConstants.Teleop.INTAKE_Y_ANGLE_CHASSIS);
         xPid.setTolerance(RobotConstants.Tuning.CHASSIS_TOLERANCE[1]);

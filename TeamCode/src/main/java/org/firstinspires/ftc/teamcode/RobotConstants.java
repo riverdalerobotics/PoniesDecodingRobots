@@ -146,8 +146,8 @@ public class RobotConstants {
         public static   double VELOCITY_TOLERANCE = 5.0;     // in/s - how slow robot must be
 
         // Timeout settings
-        public static   double PATH_TIMEOUT = 30.0;          // seconds - max time for any path
-        public static   double POINT_TIMEOUT = 10.0;         // seconds - max time to reach a point
+        public static   double PATH_TIMEOUT = 30.0;          // seconds - max AUTO_TIME for any path
+        public static   double POINT_TIMEOUT = 10.0;         // seconds - max AUTO_TIME to reach a point
     }
 
     // === TELEOP CONTROL SETTINGS ===
@@ -179,9 +179,9 @@ public class RobotConstants {
         public static double INTAKE_FEEDER = 0.1;
 
         //Timers
-        public static long SHOOTER_TIMER = 1000;
+        public static long SHOOTER_TIMER = 500;
         public static long HOLD_THE_ARM = 500;
-        public static long DRIVE_FORWARD_AUTO = 1000;
+        public static long DRIVE_FORWARD_AUTO = 1500;
         public static long DRIVE_FORWARD_CLOSE_AUTO = 500;
 
 
@@ -189,7 +189,8 @@ public class RobotConstants {
         public static   double[] WHITE_RGB = {0, 0, 0};
         public static   double INTAKE_MIN = 100;
         public static double CLOSE_SHOT_THRESHOLD = 1;
-        public static double CLOSE_SHOT = 1585;
+        public static double CLOSE_SHOT_TELEOP = 1435;
+        public static double CLOSE_SHOT_AUTO = 1535;
         public static double VERY_CLOSE_SHOT = 500;
         public static double FAR_SHOT = 1930;
         public static   double WHITE_THRESHOLD = 20;
@@ -261,11 +262,21 @@ public class RobotConstants {
         }
     }
     @Configurable
-    public static class Testing{
-        public static long time = 2000;
-        public static Pose CHASSIS_DRIVE_TO_SECOND_INTAKE = new Pose(-3.4,2., -20);
-        public static Pose CHASSIS_DRIVE_TO_FIRST_INTAKE = new Pose(-2.7,2.3, -30);
-        public static Pose CHASSIS_DRIVE_TO_SECOND_SHOT = new Pose(-2.4, 2.4, -40);
+    public static class RedAuto {
+        public static long AUTO_TIME = 500;
+        public static Pose RED_SECOND_INTAKE_POSE = new Pose(-3.4,2.4, -20);
+        public static Pose RED_FIRST_INTAKE_POSE = new Pose(-2.55,2.6, -30);
+        public static Pose RED_SCORE_POSE = new Pose(-2.4, 2.4, -32);
+    }
+    @Configurable
+    public static class BlueAuto {
+        public static long END_AUTO_TIME = 28000;
+        public static long AUTO_TIME = 1200;
+        public static Pose BLUE_SECOND_INTAKE_POSE = new Pose(-3.3,-2.5, 20);
+        public static Pose BLUE_FIRST_INTAKE_POSE = new Pose(-2.7,-2.6, 30);
+        public static Pose BLUE_FAR_INTAKE = new Pose(-3.8, -2.5, 0);
+        public static Pose BLUE_FAR_SHOT = new Pose(-4.8, -2.5, 20);
+        public static Pose BLUE_SCORE_POSE = new Pose(-2.4, -2.4, 35);
     }
     // === TUNING AND CALIBRATION ===
     @Configurable
@@ -285,12 +296,14 @@ public class RobotConstants {
         public static   double CALIBRATION_ANGLE = 360.0;      // degrees for rotation test
 
         //PID coefficients
+        public static   double[] CHASSIS_PID_COEFFICIENTS_POINT = {-0.027, -0.0017, -0.0007};
+
         public static double[] SHOOTER_PIDF_COEFFICIENTS = {0.0023, 0.0075, 0.0005, 0.000435};
-        public static   double[] CHASSIS_PID_COEFFICIENTS_POINT = {-0.025, -0.02, -0.001};
-        public static   double[] CHASSIS_TURN_PID_COEFFICIENTS = {0.03, 0.034, 0.00004};
-        public static   double[] CHASSIS_DRIVE_PID_COEFFICIENTS = {0.75, 0.2, 0.05};
-        public static   double [] CHASSIS_TOLERANCE = {0.09, 1};
-        public static double[] SHOOTER_TOLERANCE = {30,10};
+        public static   double[] CHASSIS_PID_COEFFICIENTS_POINT_AUTO = {-0.032, -0.00185, -0.0007};
+        public static   double[] CHASSIS_TURN_PID_COEFFICIENTS = {0.025, 0.0036, 0.0004};
+        public static   double[] CHASSIS_DRIVE_PID_COEFFICIENTS = {1.7, 0.1, 0.5};
+        public static   double [] CHASSIS_TOLERANCE = {0.12, 1.55};
+        public static double[] SHOOTER_TOLERANCE = {50  ,10};
 
         //Other coefficients
         public static double POINT_AT_AT_TARGET = 0;

@@ -8,19 +8,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-public class RevToVeloUsingPID extends CommandBase {
+public class RevToVeloUsingPIDAUTO extends CommandBase {
     double setpoint;
     ShooterSubsystem shooter;
     Telemetry telemetry;
     PIDFController shooterPID;
     boolean stop = false;
-    public RevToVeloUsingPID(ShooterSubsystem shooter, Telemetry telemetry){
+    public RevToVeloUsingPIDAUTO(ShooterSubsystem shooter, Telemetry telemetry){
         this.shooter = shooter;
         addRequirements(shooter);
         this.telemetry = telemetry;
         this.shooterPID = shooter.getShooterPID();
     }
-    public RevToVeloUsingPID(ShooterSubsystem shooter, Telemetry telemetry, boolean stop){
+    public RevToVeloUsingPIDAUTO(ShooterSubsystem shooter, Telemetry telemetry, boolean stop){
         this.shooter = shooter;
         addRequirements(shooter);
         this.telemetry = telemetry;
@@ -41,7 +41,7 @@ public class RevToVeloUsingPID extends CommandBase {
             if(shooter.getLLResult().getTa()<RobotConstants.Teleop.CLOSE_SHOT_THRESHOLD){
                 setpoint = RobotConstants.Teleop.FAR_SHOT;
             }else{
-                setpoint = RobotConstants.Teleop.CLOSE_SHOT_TELEOP;
+                setpoint = RobotConstants.Teleop.CLOSE_SHOT_AUTO;
             }
             shooter.setHoodAngle(RobotConstants.clamp(RobotConstants.Tuning.TA_TO_ANGLE*shooter.getLLResult().getTa(), -0.05, 0.16));
         }

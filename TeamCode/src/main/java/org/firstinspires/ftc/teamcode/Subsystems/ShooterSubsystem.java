@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -72,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return voltage.getVoltage();
     }
     public void setRevSpeeds(double far, double close){
-        RobotConstants.Teleop.CLOSE_SHOT = close;
+        RobotConstants.Teleop.CLOSE_SHOT_TELEOP = close;
         RobotConstants.Teleop.FAR_SHOT = far;
     }
     public double getSpeed(){
